@@ -16,18 +16,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Furnizor)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CIF)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CodRegistruComert)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumarTelefon)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdresaSediu)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -36,18 +24,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Furnizor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CIF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodRegistruComert)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumarTelefon)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdresaSediu)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
