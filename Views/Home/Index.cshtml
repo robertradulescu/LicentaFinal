@@ -1,30 +1,7 @@
 ﻿@{
-    ViewData["Title"] = "Autocomplete";
+    ViewData["Title"] = "Aplicatie de gestiune a stocurilor";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<input type="text" id="txtNumeProdus" name="txtNumeProdus" />
 
-@section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-    <link href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
-    <script>
-        $(function () {
-            $("#txtNumeProdus").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: "/Home/AutocompleteNumeProdus",
-                        type: "GET",
-                        data: { term: request.term },
-                        success: function (data) {
-                            response(data);
-                        }
-                    });
-                },
-                minLength: 2
-            });
-        });
-    </script>
-}

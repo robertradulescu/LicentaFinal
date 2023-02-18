@@ -50,7 +50,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
     <link href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
     <script>
@@ -58,7 +58,7 @@
             $("#txtNumeProdus").autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: "/Home/AutocompleteNumeProdus",
+                        url: "/Stocuris/AutocompleteNumeProdus",
                         type: "GET",
                         data: { term: request.term },
                         success: function (data) {

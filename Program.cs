@@ -28,6 +28,8 @@ else
     app.UseHsts();
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -39,6 +41,21 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+app.MapControllerRoute(
+    name: "DownloadPDF",
+    pattern: "Stocuris/DownloadPDF/{id}",
+    defaults: new { controller = "Stocuris", action = "DownloadPDF" });
+
+app.MapControllerRoute(
+    name: "DownloadPDF",
+    pattern: "Furnizoris/DownloadPDF/{id}",
+    defaults: new { controller = "Furnizoris", action = "DownloadPDF" });
+
 app.MapRazorPages();
+
+
+
 
 app.Run();

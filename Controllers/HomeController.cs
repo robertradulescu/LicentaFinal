@@ -20,32 +20,7 @@ namespace LicentaFinal.Controllers
             Context = context;
         }
 
-        [HttpPost]
-        public JsonResult AutoComplete(string prefix) 
-        {
-            var stocuri= (from Stocuri in Context.Stocuri
-                          
-                          where Stocuri.NumeProdus.StartsWith(prefix)
-                          select new
-                          {
-                              label= Stocuri.NumeProdus,
-                              val= Stocuri.Id
 
-                          }).ToList();
-                          
-            return Json(stocuri); 
-        }
-
-        [HttpGet]
-        public IActionResult AutocompleteNumeProdus(string term)
-        {
-            var results = Context.Stocuri
-                            .Where(s => s.NumeProdus.Contains(term))
-                            .Select(s => s.NumeProdus)
-                            .Take(10)
-                            .ToList();
-            return Json(results);
-        }
 
 
         [HttpPost]

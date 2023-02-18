@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using LicentaFinal.Data;
 using LicentaFinal.Models;
 using Microsoft.AspNetCore.Authorization;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace LicentaFinal.Controllers
 {
@@ -19,6 +21,43 @@ namespace LicentaFinal.Controllers
         {
             _context = context;
         }
+
+        [HttpGet]
+        public IActionResult AutocompleteNumeProdus(string term)
+        {
+            var results = _context.Stocuri
+                            .Where(s => s.NumeProdus.Contains(term))
+                            .Select(s => s.NumeProdus)
+                            .Take(10)
+                            .ToList();
+            return Json(results);
+        }
+
+        public async Task<IActionResult> DownloadPDF(int? id)
+        {
+            var stoc = _context.Stocuri.Find(id);
+
+            if (stoc == null)
+            {
+                return NotFound();
+            }
+
+            // creaza un fisier PDF si scrie continutul in el
+            var document = new Document();
+            var memoryStream = new MemoryStream();
+            var writer = PdfWriter.GetInstance(document, memoryStream);
+            document.Open();
+            document.Add(new Paragraph($"Detalii produs: {stoc.NumeProdus}"));
+            document.Add(new Paragraph($"Preț: {stoc.Pret}"));
+            document.Add(new Paragraph($"Cantitate: {stoc.Cantitate}"));
+            document.Close();
+
+            // seteaza header-ul si descarca fisierul PDF
+            Response.Headers.Add("Content-Disposition", "attachment; filename=stoc.pdf");
+            return File(memoryStream.ToArray(), "application/pdf");
+        }
+
+
 
         // GET: Stocuris
 

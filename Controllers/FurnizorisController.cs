@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LicentaFinal.Data;
 using LicentaFinal.Models;
+using Microsoft.AspNetCore.Authorization;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace LicentaFinal.Controllers
 {
@@ -18,6 +21,46 @@ namespace LicentaFinal.Controllers
         {
             _context = context;
         }
+
+        [HttpGet]
+        public IActionResult AutocompleteNumeFurnizor(string term)
+        {
+            var results = _context.Furnizori
+                            .Where(s => s.Furnizor.Contains(term))
+                            .Select(s => s.Furnizor)
+                            .Take(10)
+                            .ToList();
+            return Json(results);
+        }
+
+        public async Task<IActionResult> DownloadPDF(int? id)
+        {
+            var furn = _context.Furnizori.Find(id);
+
+            if (furn == null)
+            {
+                return NotFound();
+            }
+
+            // creaza un fisier PDF si scrie continutul in el
+            var document = new Document();
+            var memoryStream = new MemoryStream();
+            var writer = PdfWriter.GetInstance(document, memoryStream);
+            document.Open();
+            document.Add(new Paragraph($"Nume furnizor: {furn.Furnizor}"));
+            document.Add(new Paragraph($"Codul de identificare fiscală – CIF: {furn.CIF}"));
+            document.Add(new Paragraph($"Cod registru comert: {furn.CodRegistruComert}"));
+            document.Add(new Paragraph($"Numar telefon: {furn.NumarTelefon}"));
+            document.Add(new Paragraph($"Adresa furnizor: {furn.AdresaSediu}"));
+
+            document.Close();
+
+            // seteaza header-ul si descarca fisierul PDF
+            Response.Headers.Add("Content-Disposition", "attachment; filename=stoc.pdf");
+            return File(memoryStream.ToArray(), "application/pdf");
+        }
+
+
 
         // GET: Furnizoris
         public async Task<IActionResult> Index()
