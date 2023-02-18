@@ -11,5 +11,6 @@ namespace LicentaFinal.Data
         {
         }
         public DbSet<LicentaFinal.Models.Stocuri> Stocuri { get; set; }
+        public DbSet<LicentaFinal.Models.Furnizori> Furnizori { get; set; }
     }
 }

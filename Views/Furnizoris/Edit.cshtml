@@ -1,0 +1,55 @@
+﻿@model LicentaFinal.Models.Furnizori
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Furnizori</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Furnizor" class="control-label"></label>
+                <input asp-for="Furnizor" class="form-control" />
+                <span asp-validation-for="Furnizor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CIF" class="control-label"></label>
+                <input asp-for="CIF" class="form-control" />
+                <span asp-validation-for="CIF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CodRegistruComert" class="control-label"></label>
+                <input asp-for="CodRegistruComert" class="form-control" />
+                <span asp-validation-for="CodRegistruComert" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumarTelefon" class="control-label"></label>
+                <input asp-for="NumarTelefon" class="form-control" />
+                <span asp-validation-for="NumarTelefon" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdresaSediu" class="control-label"></label>
+                <input asp-for="AdresaSediu" class="form-control" />
+                <span asp-validation-for="AdresaSediu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
