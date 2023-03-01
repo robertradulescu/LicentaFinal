@@ -1,0 +1,101 @@
+﻿@model LicentaFinal.Models.Order
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Creat" class="control-label"></label>
+                <input asp-for="Creat" class="form-control" />
+                <span asp-validation-for="Creat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Serie" class="control-label"></label>
+                <input asp-for="Serie" class="form-control" />
+                <span asp-validation-for="Serie" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Numar" class="control-label"></label>
+                <input asp-for="Numar" class="form-control" />
+                <span asp-validation-for="Numar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Moneda" class="control-label"></label>
+                <input asp-for="Moneda" class="form-control" />
+                <span asp-validation-for="Moneda" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cumparator" class="control-label"></label>
+                <input asp-for="Cumparator" class="form-control" />
+                <span asp-validation-for="Cumparator" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Adresa" class="control-label"></label>
+                <input asp-for="Adresa" class="form-control" />
+                <span asp-validation-for="Adresa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Iban" class="control-label"></label>
+                <input asp-for="Iban" class="form-control" />
+                <span asp-validation-for="Iban" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Banca" class="control-label"></label>
+                <input asp-for="Banca" class="form-control" />
+                <span asp-validation-for="Banca" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdresaMail" class="control-label"></label>
+                <input asp-for="AdresaMail" class="form-control" />
+                <span asp-validation-for="AdresaMail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observatii" class="control-label"></label>
+                <input asp-for="Observatii" class="form-control" />
+                <span asp-validation-for="Observatii" class="text-danger"></span>
+            </div>
+            <div id="orderItemsContainer">
+                @Html.EditorFor(model => model.Items)
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="btn btn-default" type="button" id="btnAdd" value="Add product" />
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" value="Create" id="submit" class="btn btn-default" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $("#btnAdd").on('click', function () {
+            $.ajax({
+                async: true,
+                data: $('#form').serialize(),
+                type: "POST",
+                url: '/Orders/AddOrderItem',
+                success: function (partialView) {
+                    console.log("partialView: "+partialView);
+                    $('#orderItemsContainer').html(partialView);
+                }
+            });
+        });
+    </script>
+}

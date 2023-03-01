@@ -1,0 +1,97 @@
+﻿@model LicentaFinal.Models.Order
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Creat" class="control-label"></label>
+                <input asp-for="Creat" class="form-control" />
+                <span asp-validation-for="Creat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Serie" class="control-label"></label>
+                <input asp-for="Serie" class="form-control" />
+                <span asp-validation-for="Serie" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Numar" class="control-label"></label>
+                <input asp-for="Numar" class="form-control" />
+                <span asp-validation-for="Numar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Moneda" class="control-label"></label>
+                <input asp-for="Moneda" class="form-control" />
+                <span asp-validation-for="Moneda" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cumparator" class="control-label"></label>
+                <input asp-for="Cumparator" class="form-control" />
+                <span asp-validation-for="Cumparator" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Adresa" class="control-label"></label>
+                <input asp-for="Adresa" class="form-control" />
+                <span asp-validation-for="Adresa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Iban" class="control-label"></label>
+                <input asp-for="Iban" class="form-control" />
+                <span asp-validation-for="Iban" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Banca" class="control-label"></label>
+                <input asp-for="Banca" class="form-control" />
+                <span asp-validation-for="Banca" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdresaMail" class="control-label"></label>
+                <input asp-for="AdresaMail" class="form-control" />
+                <span asp-validation-for="AdresaMail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observatii" class="control-label"></label>
+                <input asp-for="Observatii" class="form-control" />
+                <span asp-validation-for="Observatii" class="text-danger"></span>
+            </div>
+            @foreach (var item in Model.Items)
+            {
+                <table>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(modelItem => item.NumeProdus)
+                            @Html.DisplayFor(modelItem => item.NumeProdus)
+
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(modelItem => item.Cantitate)
+                            @Html.DisplayFor(modelItem => item.Cantitate)
+
+                        </th>
+                    </tr>
+                </table>
+            }
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

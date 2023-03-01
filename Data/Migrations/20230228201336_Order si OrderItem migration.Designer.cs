@@ -4,6 +4,7 @@ using LicentaFinal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LicentaFinal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230228201336_Order si OrderItem migration")]
+    partial class OrdersiOrderItemmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -356,7 +358,7 @@ namespace LicentaFinal.Data.Migrations
             modelBuilder.Entity("LicentaFinal.Models.OrderItem", b =>
                 {
                     b.HasOne("LicentaFinal.Models.Order", null)
-                        .WithMany("Items")
+                        .WithMany("Iteme")
                         .HasForeignKey("OrderId");
                 });
 
@@ -413,7 +415,7 @@ namespace LicentaFinal.Data.Migrations
 
             modelBuilder.Entity("LicentaFinal.Models.Order", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("Iteme");
                 });
 #pragma warning restore 612, 618
         }
