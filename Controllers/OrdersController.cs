@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LicentaFinal.Data;
 using LicentaFinal.Models;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace LicentaFinal.Controllers
 {
@@ -91,6 +94,53 @@ namespace LicentaFinal.Controllers
             }
             return View(order);
         }
+
+        public async Task<IActionResult> DownloadPDF(int? id)
+        {
+
+            var ord = await _context.Order.FindAsync(id);
+
+            if (ord == null)
+            {
+                return NotFound();
+            }
+
+            var querry = _context.Order.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
+
+
+            if (ord == null)
+            {
+                return NotFound();
+            }
+
+            // creaza un fisier PDF si scrie continutul in el
+            var document = new Document();
+            var memoryStream = new MemoryStream();
+            var writer = PdfWriter.GetInstance(document, memoryStream);
+            document.Open();
+            document.Add(new Paragraph($"Data factura: {ord.Creat}"));
+            document.Add(new Paragraph($"Serie: {ord.Serie}"));
+            document.Add(new Paragraph($"Numar: {ord.Numar}"));
+            document.Add(new Paragraph($"Moneda: {ord.Moneda}"));
+            document.Add(new Paragraph($"Cumparator: {ord.Cumparator}"));
+            document.Add(new Paragraph($"Adresa: {ord.Adresa}"));
+            document.Add(new Paragraph($"Iban: {ord.Iban}"));
+            document.Add(new Paragraph($"Banca: {ord.Banca}"));
+            document.Add(new Paragraph($"AdresaMail: {ord.AdresaMail}"));
+            document.Add(new Paragraph($"Observatii: {ord.Observatii}"));
+
+            foreach (var item in querry.Items)
+            {
+                document.Add(new Paragraph($"Produs: {item.NumeProdus}  Cantitate: {item.Cantitate}"));
+            }
+
+            document.Close();
+
+            // seteaza header-ul si descarca fisierul PDF
+            Response.Headers.Add("Content-Disposition", "attachment; filename=Factura.pdf");
+            return File(memoryStream.ToArray(), "application/pdf");
+        }
+
 
         // POST: Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

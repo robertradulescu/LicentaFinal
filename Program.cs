@@ -53,6 +53,12 @@ app.MapControllerRoute(
     pattern: "Furnizoris/DownloadPDF/{id}",
     defaults: new { controller = "Furnizoris", action = "DownloadPDF" });
 
+app.MapControllerRoute(
+    name: "DownloadPDF",
+    pattern: "Orders/DownloadPDF/{id}",
+    defaults: new { controller = "Orders", action = "DownloadPDF" });
+
+
 app.MapRazorPages();
 
 
