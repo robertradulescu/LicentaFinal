@@ -131,7 +131,7 @@ namespace LicentaFinal.Controllers
 
             foreach (var item in querry.Items)
             {
-                document.Add(new Paragraph($"Produs: {item.NumeProdus}  Cantitate: {item.Cantitate}"));
+                document.Add(new Paragraph($"Produs: {item.NumeProdus}  Cantitate: {item.Cantitate}  Pret: {item.Cantitate} "));
             }
 
             document.Close();
