@@ -42,6 +42,15 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "order-chart",
+        pattern: "Orders/chart",
+        defaults: new { controller = "Order", action = "Chart" });
+});
+
+
 
 app.MapControllerRoute(
     name: "DownloadPDF",

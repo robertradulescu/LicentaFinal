@@ -6,6 +6,14 @@
 
 <h1>Details</h1>
 
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"> </script>
+
+
+
+</head>
+
 <div>
     <h4>Order</h4>
     <hr />
@@ -71,36 +79,55 @@
             @Html.DisplayFor(model => model.Observatii)
         </dd>
 
-        @foreach (var item in Model.Items)
-        {
-            <table>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(modelItem => item.NumeProdus)
-                        @Html.DisplayFor(modelItem => item.NumeProdus)
-
-                    </th>
-
-                    <th>
-                        @Html.DisplayNameFor(modelItem => item.Cantitate)
-                        @Html.DisplayFor(modelItem => item.Cantitate)
-
-                    </th>
-
-                    <th>
-                        @Html.DisplayNameFor(modelItem => item.Pret)
-                        @Html.DisplayFor(modelItem => item.Pret)
-
-                    </th>
-                </tr>
-            </table>
-        }
 
 
     </dl>
+
+    <table class="table table-grey">
+        <thead>
+        <tr>
+            <th>
+                NumeProdus
+            </th>
+            <th>
+                Cantitate
+            </th>
+            <th>
+                Pret
+            </th>
+        </tr>
+        </thead>
+
+    </table>
+
+
+
+
+    @foreach (var item in Model.Items)
+    {
+        <table class="table table-hover">
+            <tr>
+
+                <td>@Html.DisplayFor(modelItem => item.NumeProdus)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cantitate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Pret)</td>
+            </tr>
+        </table>
+    }
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
-    <a asp-action="Index" class="btn btn-primary">Back to List</a>
-    <a asp-controller="Orders" asp-action="DownloadPDF" asp-route-id="@Model?.Id" class="btn btn-primary">Descarcă PDF</a>
+
+
 </div>
+
+
+ 
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-dark">Back to List</a>
+    <a asp-controller="Orders" asp-action="DownloadPDF" asp-route-id="@Model?.Id" class="btn btn-outline-success">Descarcă PDF</a>
+
+</div>
+

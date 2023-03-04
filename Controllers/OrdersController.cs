@@ -9,7 +9,8 @@ using LicentaFinal.Data;
 using LicentaFinal.Models;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
-using static iTextSharp.text.pdf.AcroFields;
+using Microsoft.AspNetCore.Http;
+
 
 namespace LicentaFinal.Controllers
 {
@@ -20,6 +21,16 @@ namespace LicentaFinal.Controllers
         public OrdersController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public IActionResult MyChart()
+        {
+            var data = _context.OrderItem
+                .GroupBy(o => o.NumeProdus)
+                .Select(g => new { NumeProdus = g.Key, Cantitate = g.Sum(o => o.Cantitate) })
+                .ToList();
+
+            return Json(data);
         }
 
         // GET: Orders

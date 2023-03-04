@@ -63,15 +63,16 @@
                 <input asp-for="Observatii" class="form-control" />
                 <span asp-validation-for="Observatii" class="text-danger"></span>
             </div>
+            <div class="col-md-4">
+                <input class="btn btn-info" type="button" id="btnAdd" value="Add product" />
+            </div>
             <div id="orderItemsContainer">
                 @Html.EditorFor(model => model.Items)
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <input class="btn btn-default" type="button" id="btnAdd" value="Add product" />
-                </div>
+              
                 <div class="col-md-2">
-                    <input type="submit" value="Create" id="submit" class="btn btn-default" />
+                    <input type="submit" value="Create" id="submit" class="btn btn-success" />
                 </div>
             </div>
         </form>

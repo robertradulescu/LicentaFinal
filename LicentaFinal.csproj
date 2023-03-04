@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\StyleSheet.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Chart.js" Version="3.7.1" />
     <PackageReference Include="itextsharp.xmlworker" Version="5.5.13.3" />
+    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.13" />
@@ -21,6 +27,10 @@
    <Content Update="Views\Orders\OrderItems.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Style\" />
   </ItemGroup>
 
 </Project>
