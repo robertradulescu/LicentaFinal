@@ -9,6 +9,12 @@
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
 </p>
+<form asp-action="ChartPie" method="post">
+    <div style="display: flex; justify-content: center;">
+        <canvas id="myChart" style="max-width: 500px; max-height: 500px;"></canvas>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -45,3 +51,59 @@
 }
     </tbody>
 </table>
+
+
+
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Functie pentru generarea unei culori RGB aleatorii
+        function getRandomColor() {
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            return "rgba(" + r + "," + g + "," + b + ",0.5)";
+        }
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Select(o => o.NumeProdus))),
+                datasets: [{
+                    label: 'Cantitate',
+                    data: @Html.Raw(Json.Serialize(Model.Select(o => o.Cantitate))),
+                    backgroundColor: [
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor()
+                    ],
+                    borderColor: [
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor()
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+}

@@ -23,14 +23,18 @@ namespace LicentaFinal.Controllers
             _context = context;
         }
 
-        public IActionResult MyChart()
+        public IActionResult ChartPie()
         {
-            var data = _context.OrderItem
-                .GroupBy(o => o.NumeProdus)
-                .Select(g => new { NumeProdus = g.Key, Cantitate = g.Sum(o => o.Cantitate) })
-                .ToList();
+            var orders = _context.OrderItem
+                            .GroupBy(o => o.NumeProdus)
+                            .Select(g => new OrderItem
+                            {
+                                NumeProdus = g.Key,
+                                Cantitate = g.Sum(x => x.Cantitate)
+                            })
+                            .ToList();
 
-            return Json(data);
+            return View(orders);
         }
 
         // GET: Orders
