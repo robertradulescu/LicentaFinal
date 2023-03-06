@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\lib\Logo.png" />
+    <None Include="wwwroot\lib\LogoPagina.png" />
     <None Include="wwwroot\StyleSheet.css" />
   </ItemGroup>
 
