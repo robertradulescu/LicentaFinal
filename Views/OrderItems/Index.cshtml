@@ -9,11 +9,27 @@
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
 </p>
-<form asp-action="ChartPie" method="post">
-    <div style="display: flex; justify-content: center;">
-        <canvas id="myChart" style="max-width: 500px; max-height: 500px;"></canvas>
+
+<div style="display: flex;">
+    <div style="flex: 1; padding-right: 20px; ">
+        <form asp-action="ChartPie" method="post">
+            <div style="display: flex; justify-content: center;">
+                <canvas id="myChart" style="max-width: 500px; max-height: 500px;"></canvas>
+            </div>
+        </form>
     </div>
-</form>
+    <div style="flex: 1; padding-left: 20px; margin-top: 110px;">
+        <form asp-action="ChartColumn" method="post">
+            <div style="display: flex; justify-content: center;">
+                <canvas id="myChartColumn" style="max-width: 750px; max-height: 850px;"></canvas>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
 
 <table class="table">
     <thead>
@@ -100,10 +116,74 @@
                     ],
                     borderWidth: 1
                 }]
+
             },
             options: {
                 responsive: true
             }
         });
     </script>
+
+    <script>
+        // Functie pentru generarea unei culori RGB aleatorii
+        function getRandomColor() {
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            return "rgba(" + r + "," + g + "," + b + ",0.5)";
+        }
+
+        var ctx = document.getElementById('myChartColumn').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar', // sau 'column'
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Select(o => o.NumeProdus))),
+                datasets: [{
+                    label: 'Valoare Stoc',
+                    data: @Html.Raw(Json.Serialize(Model.Select(o => o.ValoareStoc))),
+                    backgroundColor: [
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor()
+                    ],
+                    borderColor: [
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor()
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Valoare stoc'
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
 }
+

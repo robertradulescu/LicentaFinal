@@ -18,10 +18,10 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent border-bottom box-shadow mb-3">
             <a class="navbar-brand" href="#">
-                <img src="/lib/LogoPagina.png" width="105" height="86" alt="">
+                <img src="/lib/Wise.png" width="155" height="60" alt="">
             </a>
             <div class="container-fluid">
-         
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between ">
                     <ul class="navbar-nav flex-grow-1 justify-content-center">
                         @if (SignInManager.IsSignedIn(User))
@@ -30,9 +30,9 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Stocuris" asp-action="Index">Stocuri</a>
                             </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Furnizoris" asp-action="Index">Furnizori Stocuri</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Furnizoris" asp-action="Index">Furnizori Stocuri</a>
+                            </li>
 
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Facturare</a>
@@ -42,14 +42,9 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="OrderItems" asp-action="Index">Produse</a>
                             </li>
 
-                            <form class="form-inline ml-auto justify-content-center">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                            </form>
-
                         }
                     </ul>
-           
+
 
                     <partial name="_LoginPartial" />
                 </div>

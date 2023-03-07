@@ -37,6 +37,18 @@ namespace LicentaFinal.Controllers
             return View(orders);
         }
 
+        public IActionResult ChartColumn()
+        {
+            var orders = _context.OrderItem
+        .GroupBy(o => o.NumeProdus)
+        .Select(g => new { NumeProdus = g.Key, ValoareStoc = g.Sum(x => (decimal)(x.Cantitate * x.Pret)) })
+        .ToList();
+
+
+            return View(orders);
+        }
+
+
         // GET: Orders
         public async Task<IActionResult> Index()
         {
