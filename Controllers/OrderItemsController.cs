@@ -19,6 +19,27 @@ namespace LicentaFinal.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> ShowSearchForm()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult AutocompleteNumeProdus(string term)
+        {
+            var results = _context.OrderItem
+                            .Where(s => s.NumeProdus.Contains(term))
+                            .Select(s => s.NumeProdus)
+                            .Take(10)
+                            .ToList();
+            return Json(results);
+        }
+
+        public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
+        {
+            return View("Index",await _context.OrderItem.Where(j=>j.NumeProdus.Contains(SearchPhrase)).ToListAsync());
+        } 
+
         // GET: OrderItems
         public async Task<IActionResult> Index()
         {
