@@ -18,6 +18,7 @@
     <link href="~/stylesheet.css" rel="stylesheet" />
 
 
+
 </head>
 <body class="angry-multigradient">
     <header>
@@ -30,6 +31,7 @@
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between ">
                     <ul class="navbar-nav flex-grow-1 justify-content-center">
+
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
@@ -50,7 +52,6 @@
                             @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Administrator))
 
                             {
-
                                 <li class="nav-item">
                                     <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Index">Roles</a>
                                 </li>
@@ -71,28 +72,6 @@
                             </li>
                         }
 
-
-                               <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Index">Roles</a>
-                                    </li>
-
-                            
-                                <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Manager">Manager</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Admin">Admin</a>
-                                    </li>
-
-
-                            }
-                            
-                                     <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Users</a>
-                                </li>
-                         }
-                                 
-                        
 
                     </ul>
 
