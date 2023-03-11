@@ -1,7 +1,10 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using LicentaFinal.Core;
+@using Microsoft.AspNetCore.Identity
 @using LicentaFinal.Areas.Identity.Data
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,17 +17,21 @@
     <link rel="stylesheet" href="~/LicentaFinal.styles.css" asp-append-version="true" />
     <link href="~/stylesheet.css" rel="stylesheet" />
 
+
+
 </head>
 <body class="angry-multigradient">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-transparent border-bottom box-shadow mb-3">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/Home/Index">
                 <img src="/lib/Wise.png" width="155" height="65" alt="">
             </a>
+
             <div class="container-fluid">
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between ">
                     <ul class="navbar-nav flex-grow-1 justify-content-center">
+
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
@@ -42,20 +49,30 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="OrderItems" asp-action="Index">Produse</a>
                             </li>
-                               <li class="nav-item">
-                                        <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Index">Roles</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Manager">Manager</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Admin">Admin</a>
-                                    </li>
-                                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
-                        </li>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Administrator))
 
+                            {
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Index">Roles</a>
+                                </li>
+
+
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Manager">Manager</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Admin">Admin</a>
+                                </li>
+
+
+                            }
+
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                            </li>
                         }
+
+
                     </ul>
 
 
@@ -79,5 +96,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
