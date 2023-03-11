@@ -106,7 +106,7 @@ namespace LicentaFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Creat,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Items")] Order order)
+        public async Task<IActionResult> Create([Bind("Creat,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,Items")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -194,7 +194,7 @@ namespace LicentaFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Creat,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Creat,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator")] Order order)
         {
             if (id != order.Id)
             {

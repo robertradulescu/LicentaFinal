@@ -23,6 +23,8 @@
 
         public string Observatii { get; set; }
 
+        public string Creator { get; set; }
+
         public List<OrderItem> Items { get; set; }
 
 
