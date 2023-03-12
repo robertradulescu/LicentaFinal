@@ -1,4 +1,5 @@
 ﻿using LicentaFinal.Areas.Identity.Data;
+using LicentaFinal.Core;
 using LicentaFinal.Core.Repositories;
 using LicentaFinal.Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -11,17 +12,38 @@ namespace LicentaFinal.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserController(IUnitOfWork unitOfWork, SignInManager<ApplicationUser> signInManager)
+        public UserController(IUnitOfWork unitOfWork, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
             var users = _unitOfWork.User.GetUsers();
             return View(users);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -65,24 +87,30 @@ namespace LicentaFinal.Controllers
             var rolesToAdd = new List<string>();
             var rolesToDelete = new List<string>();
 
-            foreach (var role in data.Roles)
+
+            if ( User.IsInRole(Constants.Roles.Administrator))
             {
-                var assignedInDb = userRolesInDb.FirstOrDefault(ur => ur == role.Text);
-                if (role.Selected)
+                foreach (var role in data.Roles)
                 {
-                    if (assignedInDb == null)
+                    var assignedInDb = userRolesInDb.FirstOrDefault(ur => ur == role.Text);
+                    if (role.Selected)
                     {
-                        rolesToAdd.Add(role.Text);
+                        if (assignedInDb == null)
+                        {
+                            rolesToAdd.Add(role.Text);
+                        }
+                    }
+                    else
+                    {
+                        if (assignedInDb != null)
+                        {
+                            rolesToDelete.Add(role.Text);
+                        }
                     }
                 }
-                else
-                {
-                    if (assignedInDb != null)
-                    {
-                        rolesToDelete.Add(role.Text);
-                    }
-                }
+
             }
+         
 
             if (rolesToAdd.Any())
             {
@@ -97,6 +125,9 @@ namespace LicentaFinal.Controllers
             user.FirstName = data.User.FirstName;
             user.LastName = data.User.LastName;
             user.Email = data.User.Email;
+            user.UserName= data.User.Email;
+            user.NormalizedUserName=data.User.Email.ToUpper();
+            user.NormalizedEmail=data.User.Email.ToUpper();
 
             _unitOfWork.User.UpdateUser(user);
 

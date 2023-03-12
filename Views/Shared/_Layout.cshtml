@@ -52,24 +52,19 @@
                             @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Administrator))
 
                             {
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Index">Roles</a>
-                                </li>
-
-
+                              
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Manager">Manager</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Admin</a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="RoleViews" asp-action="Admin">Admin</a>
+                            }
+                            else if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Manager))
+                            {
+                                 <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Manager</a>
                                 </li>
-
 
                             }
 
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Users</a>
-                            </li>
                         }
 
 
