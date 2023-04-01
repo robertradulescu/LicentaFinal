@@ -84,6 +84,10 @@ app.MapControllerRoute(
     pattern: "Orders/DownloadPDF/{id}",
     defaults: new { controller = "Orders", action = "DownloadPDF" });
 
+app.MapControllerRoute(
+      name: "GenerateReceipt",
+      pattern: "OrderItems/GenerateReceipt/{id}",
+      defaults: new { controller = "OrderItems", action = "GenerateReceipt" });
 
 app.MapRazorPages();
 

@@ -26,6 +26,12 @@
             @Html.DisplayFor(model => model.Creat)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumeFirma)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumeFirma)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Serie)
         </dt>
         <dd class="col-sm-10">
@@ -86,6 +92,27 @@
             @Html.DisplayFor(model => model.Observatii)
         </dd>
 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AdresaCumparator)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AdresaCumparator)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CnpCumparator)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CnpCumparator)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NrInregistrareComert)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NrInregistrareComert)
+        </dd>
+
 
 
     </dl>
@@ -139,11 +166,21 @@
                 
         <a asp-action="Index" class="btn btn-outline-dark">Back to List</a>
         <a asp-controller="Orders" asp-action="DownloadPDF" asp-route-id="@Model?.Id" class="btn btn-outline-success">Descarcă PDF</a>
+
+        <div>
+            <a href="@Url.Action("GenerateReceipt", "Orders", new { id = Model.Id })" class="btn btn-outline-primary">Download receipt</a>
+        </div>
+
     }
     else
     {
         <a asp-action="Index" class="btn btn-outline-dark">Back to List</a>
-        <a asp-controller="Orders" asp-action="DownloadPDF" asp-route-id="@Model?.Id" class="btn btn-outline-success">Descarcă PDF</a>
+        <a asp-controller="Orders" asp-action="DownloadPDF" asp-route-id="@Model?.Id" class="btn btn-outline-success">Descarcă Factura</a>
+   
+        <div>
+            <a href="@Url.Action("GenerateReceipt", "Orders", new { id = Model.Id })" class="btn btn-outline-primary">Descarca Chitanta</a>
+        </div>
+
     }
 
 </div>

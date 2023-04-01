@@ -18,6 +18,13 @@
                 <input asp-for="Creat" class="form-control" />
                 <span asp-validation-for="Creat" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="NumeFirma" class="control-label"></label>
+                <input asp-for="NumeFirma" class="form-control" />
+                <span asp-validation-for="NumeFirma" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Serie" class="control-label"></label>
                 <input asp-for="Serie" class="form-control" />
@@ -63,6 +70,30 @@
                 <input asp-for="Observatii" class="form-control" />
                 <span asp-validation-for="Observatii" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="Creator" class="control-label"></label>
+                <input asp-for="Creator" class="form-control" />
+                <span asp-validation-for="Creator" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AdresaCumparator" class="control-label"></label>
+                <input asp-for="AdresaCumparator" class="form-control" />
+                <span asp-validation-for="AdresaCumparator" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CnpCumparator" class="control-label"></label>
+                <input asp-for="CnpCumparator" class="form-control" />
+                <span asp-validation-for="CnpCumparator" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NrInregistrareComert" class="control-label"></label>
+                <input asp-for="NrInregistrareComert" class="form-control" />
+                <span asp-validation-for="NrInregistrareComert" class="text-danger"></span>
+            </div>
+
 
 
             @foreach (var item in Model.Items)

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LicentaFinal.Data;
 using LicentaFinal.Models;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace LicentaFinal.Controllers
 {
@@ -18,6 +20,7 @@ namespace LicentaFinal.Controllers
         {
             _context = context;
         }
+       
 
         public async Task<IActionResult> ShowSearchForm()
         {

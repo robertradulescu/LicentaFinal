@@ -22,6 +22,80 @@ namespace LicentaFinal.Controllers
         {
             _context = context;
         }
+        public IActionResult GenerateReceipt(int id)
+        {
+            // Interogare catre baza de date pentru a extrage datele corespunzatoare elementului cu id-ul dat
+            var querry = _context.Order.Find(id);
+            if (querry == null)
+            {
+                return NotFound();
+            }
+            string Unitate = querry.NumeFirma;
+            string sediu = querry.Adresa;
+            System.DateTime data = querry.Creat;
+
+            string Cumparator=querry.Cumparator;
+            string AdresaCumparator=querry.AdresaCumparator;
+
+            long CnpCumparator=querry.CnpCumparator;
+
+            string moneda=querry.Moneda;
+
+            var order = _context.Order.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            double totalPrice = 0;
+
+            foreach (var item in order.Items)
+            {
+                double productTotalPrice = item.Cantitate * item.Pret;
+                totalPrice += productTotalPrice;
+            }
+
+
+
+            // Creaza un nou document PDF
+            Document doc = new Document();
+            MemoryStream ms = new MemoryStream();
+            PdfWriter writer = PdfWriter.GetInstance(doc, ms);
+            doc.Open();
+
+            // Adauga modelul de chitanta
+            Image img = Image.GetInstance("ModelChitanta.jpg");
+            doc.Add(img);
+
+            // Adauga datele pe chitanta
+            Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+            Font font2 = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.BOLD);
+            Phrase phrase1 = new Phrase($"{Unitate}", font);
+            Phrase phrase2 = new Phrase($"{sediu}", font);
+            Phrase phrase3 = new Phrase($"{data}", font2);
+            Phrase phrase4 = new Phrase($"{Cumparator}", font);
+            Phrase phrase5 = new Phrase($"{AdresaCumparator}", font);
+            Phrase phrase6 = new Phrase($"{CnpCumparator}", font);
+            Phrase phrase7 = new Phrase($"{totalPrice}", font);
+            Phrase phrase8 = new Phrase($"{moneda}", font);
+
+
+            PdfContentByte cb = writer.DirectContent;
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase1, 135, 750, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase2, 130, 651, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase3, 385, 650, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase4, 180, 614, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase5, 130, 588, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase6, 160, 562, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase7, 150, 535, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase8, 175, 535, 0);
+
+            // Inchide documentul si creeaza fisierul PDF
+            doc.Close();
+            byte[] bytes = ms.ToArray();
+            return File(bytes, "application/pdf", "chitanta.pdf");
+        }
 
         [HttpGet]
         public IActionResult AutocompleteNumeProdus(string term)
@@ -106,7 +180,7 @@ namespace LicentaFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Creat,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,Items")] Order order)
+        public async Task<IActionResult> Create([Bind("Creat,NumeFirma,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,AdresaCumparator,CnpCumparator,NrInregistrareComert,Items")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -194,7 +268,7 @@ namespace LicentaFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Creat,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Creat,NumeFirma,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,AdresaCumparator,CnpCumparator,NrInregistrareComert")] Order order)
         {
             if (id != order.Id)
             {
