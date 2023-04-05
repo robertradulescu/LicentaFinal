@@ -7,6 +7,7 @@
         public DateTime Creat { get; set; }
 
         public string NumeFirma { get; set; }
+
         public string Serie { get; set; }
 
         public int Numar { get; set; }

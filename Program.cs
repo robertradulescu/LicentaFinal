@@ -89,6 +89,10 @@ app.MapControllerRoute(
       pattern: "OrderItems/GenerateReceipt/{id}",
       defaults: new { controller = "OrderItems", action = "GenerateReceipt" });
 
+app.MapControllerRoute(
+     name: "orderhistory",
+     pattern: "{controller=OrderHistory}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 

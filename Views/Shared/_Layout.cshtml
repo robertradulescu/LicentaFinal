@@ -19,6 +19,7 @@
 
 
 
+
 </head>
 <body class="angry-multigradient">
     <header>
@@ -34,13 +35,6 @@
 
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Stocuris" asp-action="Index">Stocuri</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Furnizoris" asp-action="Index">Furnizori Stocuri</a>
-                            </li>
 
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Facturare</a>
@@ -49,18 +43,24 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="OrderItems" asp-action="Index">Produse</a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="OrderHistories" asp-action="Index">Istoric</a>
+                            </li>
+
+
                             @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Administrator))
 
                             {
                               
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Admin</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Admin</a>
                                 </li>
                             }
                             else if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Manager))
                             {
                                  <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Manager</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Manager</a>
                                 </li>
 
                             }
@@ -76,6 +76,8 @@
             </div>
         </nav>
     </header>
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

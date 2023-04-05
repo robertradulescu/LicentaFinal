@@ -10,6 +10,7 @@ using LicentaFinal.Models;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
 using Microsoft.AspNetCore.Http;
+using Org.BouncyCastle.Asn1.X509;
 
 
 namespace LicentaFinal.Controllers
@@ -235,25 +236,125 @@ namespace LicentaFinal.Controllers
             }
 
             // creaza un fisier PDF si scrie continutul in el
+            // Creare document PDF
             var document = new Document();
             var memoryStream = new MemoryStream();
             var writer = PdfWriter.GetInstance(document, memoryStream);
             document.Open();
-            document.Add(new Paragraph($"Data factura: {ord.Creat}"));
-            document.Add(new Paragraph($"Serie: {ord.Serie}"));
-            document.Add(new Paragraph($"Numar: {ord.Numar}"));
-            document.Add(new Paragraph($"Moneda: {ord.Moneda}"));
-            document.Add(new Paragraph($"Cumparator: {ord.Cumparator}"));
-            document.Add(new Paragraph($"Adresa: {ord.Adresa}"));
-            document.Add(new Paragraph($"Iban: {ord.Iban}"));
-            document.Add(new Paragraph($"Banca: {ord.Banca}"));
-            document.Add(new Paragraph($"AdresaMail: {ord.AdresaMail}"));
-            document.Add(new Paragraph($"Observatii: {ord.Observatii}"));
 
+            // Adăugare logo și titlu
+            var logo = Image.GetInstance("Logo.png");
+            logo.ScalePercent(30f);
+            logo.Alignment = Element.ALIGN_CENTER;
+            document.Add(logo);
+            document.Add(new Paragraph("Factura", new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD)));
+            document.Add(new Chunk("\n\n"));
+
+            // Adăugare detalii factură
+            var facturaTable = new PdfPTable(2);
+            facturaTable.WidthPercentage = 100;
+            facturaTable.SpacingAfter = 20;
+
+            // Stilizare celule tabel
+            var cellStyle = new PdfPCell();
+            cellStyle.Padding = 8;
+            cellStyle.Border = 0;
+            cellStyle.BorderWidthBottom = 1;
+
+            // Adăugare celule tabel
+            facturaTable.AddCell(new PdfPCell(new Phrase("Data factura:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Creat.ToShortDateString()}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            facturaTable.AddCell(cellStyle);
+            facturaTable.AddCell(cellStyle);
+
+            facturaTable.AddCell(new PdfPCell(new Phrase("Serie:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Serie}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            facturaTable.AddCell(new PdfPCell(new Phrase("Numar:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Numar}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            facturaTable.AddCell(new PdfPCell(new Phrase("Moneda:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Moneda}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            facturaTable.AddCell(new PdfPCell(new Phrase("Cumparator:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Cumparator}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            facturaTable.AddCell(new PdfPCell(new Phrase("Adresa:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Adresa}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            facturaTable.AddCell(new PdfPCell(new Phrase("IBAN:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Iban}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });         
+            
+            facturaTable.AddCell(new PdfPCell(new Phrase("Banca:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Banca}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            document.Add(facturaTable); ;
+
+            // Adăugare tabel produse
+            var productsTable = new PdfPTable(4);
+            productsTable.WidthPercentage = 100;
+            productsTable.SpacingAfter = 20;
+            productsTable.SetWidths(new float[] { 2f, 1f, 1f, 1f });
+
+            // Add table headers
+            var produsHeader = new PdfPCell(new Phrase("Produs", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+            produsHeader.HorizontalAlignment = Element.ALIGN_CENTER;
+            produsHeader.PaddingBottom = 10;
+            produsHeader.BackgroundColor = new BaseColor(230, 230, 230);
+            productsTable.AddCell(produsHeader);
+
+            var pretHeader = new PdfPCell(new Phrase("Pret unitar", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+            pretHeader.HorizontalAlignment = Element.ALIGN_CENTER;
+            pretHeader.PaddingBottom = 10;
+            pretHeader.BackgroundColor = new BaseColor(230, 230, 230);
+            productsTable.AddCell(pretHeader);
+
+            var cantitateHeader = new PdfPCell(new Phrase("Cantitate", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+            cantitateHeader.HorizontalAlignment = Element.ALIGN_CENTER;
+            cantitateHeader.PaddingBottom = 10;
+            cantitateHeader.BackgroundColor = new BaseColor(230, 230, 230);
+            productsTable.AddCell(cantitateHeader);
+
+            var totalHeader = new PdfPCell(new Phrase("Total", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+            totalHeader.HorizontalAlignment = Element.ALIGN_CENTER;
+            totalHeader.PaddingBottom = 10;
+            totalHeader.BackgroundColor = new BaseColor(230, 230, 230);
+            productsTable.AddCell(totalHeader);
+
+            // Add table rows
             foreach (var item in querry.Items)
             {
-                document.Add(new Paragraph($"Produs: {item.NumeProdus}  Cantitate: {item.Cantitate}  Pret: {item.Cantitate} "));
+                var produsCell = new PdfPCell(new Phrase(item.NumeProdus, new Font(Font.FontFamily.HELVETICA, 10)));
+                produsCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                productsTable.AddCell(produsCell);
+
+                var pretCell = new PdfPCell(new Phrase(item.Pret.ToString("0.00"), new Font(Font.FontFamily.HELVETICA, 10)));
+                pretCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                productsTable.AddCell(pretCell);
+
+                var cantitateCell = new PdfPCell(new Phrase(item.Cantitate.ToString(), new Font(Font.FontFamily.HELVETICA, 10)));
+                cantitateCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                productsTable.AddCell(cantitateCell);
+
+                var totalValue = item.ValoareStoc.ToString("0.00"); // convertim valoarea numerica la un șir de caractere
+                var currency = ord.Moneda.ToString(); // convertim valoarea variabilei ord.Moneda la un șir de caractere
+
+                var totalCell = new PdfPCell(new Phrase(totalValue + " " + currency, new Font(Font.FontFamily.HELVETICA, 10)));
+                totalCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                productsTable.AddCell(totalCell);
+
             }
+            // Apply Bootstrap styling to table
+            productsTable.DefaultCell.Border = Rectangle.NO_BORDER;
+            productsTable.DefaultCell.PaddingTop = 10;
+            productsTable.DefaultCell.PaddingBottom = 10;
+            productsTable.DefaultCell.PaddingLeft = 5;
+            productsTable.DefaultCell.PaddingRight = 5;
+
+
+            document.Add(productsTable);
+   
 
             document.Close();
 

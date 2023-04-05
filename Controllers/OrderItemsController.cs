@@ -121,6 +121,35 @@ namespace LicentaFinal.Controllers
             {
                 try
                 {
+                    var oldOrderItem = await _context.OrderItem.AsNoTracking().FirstOrDefaultAsync(oi => oi.Id == orderItem.Id);
+
+                    if (oldOrderItem.Cantitate != orderItem.Cantitate)
+                    {
+                        _context.OrderHistory.Add(new OrderHistory
+                        {
+                            DateChanged = DateTime.UtcNow,
+                            OrderItemId = orderItem.Id,
+                            OrderItem = orderItem,
+                            OldQuantity = oldOrderItem.Cantitate,
+                            NewQuantity = orderItem.Cantitate,
+                            OldPrice = oldOrderItem.Pret,
+                            NewPrice = orderItem.Pret
+                        });
+                    }
+                    else if (oldOrderItem.Pret != orderItem.Pret)
+                    {
+                        _context.OrderHistory.Add(new OrderHistory
+                        {
+                            DateChanged = DateTime.UtcNow,
+                            OrderItemId = orderItem.Id,
+                            OrderItem = orderItem,
+                            OldQuantity = oldOrderItem.Cantitate,
+                            NewQuantity = orderItem.Cantitate,
+                            OldPrice = oldOrderItem.Pret,
+                            NewPrice = orderItem.Pret
+                        });
+                    }
+
                     _context.Update(orderItem);
                     await _context.SaveChangesAsync();
                 }
@@ -135,10 +164,14 @@ namespace LicentaFinal.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(orderItem);
         }
+
+
 
         // GET: OrderItems/Delete/5
         public async Task<IActionResult> Delete(int? id)

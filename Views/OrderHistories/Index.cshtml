@@ -1,0 +1,36 @@
+﻿@model IEnumerable<LicentaFinal.Models.OrderHistory>
+
+<h2>Order Item History</h2> <br />
+
+
+<form asp-controller="OrderHistories" asp-action="Cleanup">
+    <input type="hidden"  />
+    <input type="submit" value="Sterge Istoric" class="btn btn-danger" /> 
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date Changed</th>
+            <th>Order Item</th>
+            <th>Old Quantity</th>
+            <th>New Quantity</th>
+            <th>Old Price</th>
+            <th>New Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var history in Model)
+        {
+            <tr>
+                <td>@history.DateChanged</td>
+                <td>@history.OrderItem.NumeProdus</td>
+                <td>@history.OldQuantity</td>
+                <td>@history.NewQuantity</td>
+                <td>@history.OldPrice</td>
+                <td>@history.NewPrice</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -22,10 +22,10 @@ namespace LicentaFinal.Data
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
         }
 
-        public DbSet<LicentaFinal.Models.Stocuri> Stocuri { get; set; }
-        public DbSet<LicentaFinal.Models.Furnizori> Furnizori { get; set; }
+
         public DbSet<LicentaFinal.Models.Order> Order { get; set; }
         public DbSet<LicentaFinal.Models.OrderItem> OrderItem { get; set; }
+        public DbSet<LicentaFinal.Models.OrderHistory>? OrderHistory { get; set; }
     }
 
     public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>

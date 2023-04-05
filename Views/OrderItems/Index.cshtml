@@ -1,17 +1,13 @@
 ﻿@using LicentaFinal.Core;
 @model IEnumerable<LicentaFinal.Models.OrderItem>
 
-@{
-    ViewData["Title"] = "Index";
-}
 
-<h1>Index</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
 </p>
 
-<div style="display: flex;">
+    <div style="display: flex;">
     <div style="flex: 1; padding-right: 20px; ">
         <form asp-action="ChartPie" method="post">
             <div style="display: flex; justify-content: center;">
