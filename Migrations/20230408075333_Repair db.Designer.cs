@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LicentaFinal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230405173805_History of products")]
-    partial class Historyofproducts
+    [Migration("20230408075333_Repair db")]
+    partial class Repairdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

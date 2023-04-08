@@ -22,11 +22,14 @@ namespace LicentaFinal.Controllers
 
         public async Task<IActionResult> Index()
         {
+            string currentUserName = User.Identity.Name;
             var orderHistories = await _context.OrderHistory.Include(o => o.OrderItem)
+                                                .Where(o => o.OrderItem.Creator == currentUserName)
                                                 .OrderByDescending(o => o.DateChanged)
                                                 .ToListAsync();
             return View(orderHistories);
         }
+
 
         public async Task<IActionResult> Cleanup()
         {

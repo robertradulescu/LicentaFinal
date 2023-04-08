@@ -9,16 +9,20 @@ using LicentaFinal.Data;
 using LicentaFinal.Models;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.AspNetCore.Identity;
+using LicentaFinal.Areas.Identity.Data;
 
 namespace LicentaFinal.Controllers
 {
     public class OrderItemsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrderItemsController(ApplicationDbContext context)
+        public OrderItemsController(ApplicationDbContext context , UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
        
 
@@ -41,13 +45,19 @@ namespace LicentaFinal.Controllers
         public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
         {
             return View("Index",await _context.OrderItem.Where(j=>j.NumeProdus.Contains(SearchPhrase)).ToListAsync());
-        } 
+        }
 
         // GET: OrderItems
         public async Task<IActionResult> Index()
         {
-              return View(await _context.OrderItem.ToListAsync());
+            var currentUser = await _userManager.GetUserAsync(User);
+            var items = await _context.OrderItem
+                .Where(item => item.Creator == currentUser.UserName)
+                .ToListAsync();
+
+            return View(items);
         }
+
 
         // GET: OrderItems/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -110,7 +120,7 @@ namespace LicentaFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NumeProdus,Cantitate,Pret")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NumeProdus,Cantitate,Pret,Creator")] OrderItem orderItem)
         {
             if (id != orderItem.Id)
             {

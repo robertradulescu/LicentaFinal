@@ -22,4 +22,14 @@
             <span asp-validation-for="Pret" class="text-danger"></span>
         </div>
     </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Creator"></label>
+            <input asp-for="Creator" type="hidden" class="form-control" value="@User.Identity.Name" />
+            <span asp-validation-for="Creator" class="text-danger"></span>
+        </div>
+    </div>
+
+
 </div>

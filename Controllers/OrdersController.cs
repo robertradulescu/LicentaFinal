@@ -11,17 +11,21 @@ using iTextSharp.text.pdf;
 using iTextSharp.text;
 using Microsoft.AspNetCore.Http;
 using Org.BouncyCastle.Asn1.X509;
-
+using Microsoft.AspNetCore.Identity;
+using LicentaFinal.Areas.Identity.Data;
 
 namespace LicentaFinal.Controllers
 {
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
         public IActionResult GenerateReceipt(int id)
         {
@@ -147,7 +151,12 @@ namespace LicentaFinal.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Order.Include(t=>t.Items).ToListAsync());
+            var currentUser = await _userManager.GetUserAsync(User);
+            var orders = await _context.Order
+                .Where(o => o.Creator == currentUser.UserName)
+                .Include(t => t.Items)
+                .ToListAsync();
+            return View(orders);
         }
 
         // GET: Orders/Details/5

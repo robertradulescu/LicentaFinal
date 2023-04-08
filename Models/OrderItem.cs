@@ -12,5 +12,7 @@
        public decimal ValoareStoc { get { return (decimal)(Cantitate * Pret); } }
 
         public decimal ValoareTotalaStoc { get; set; }
+
+        public string Creator { get; set; }
     }
 }
