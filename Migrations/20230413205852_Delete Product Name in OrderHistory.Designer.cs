@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LicentaFinal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230408081220_Creator in OrderItem")]
-    partial class CreatorinOrderItem
+    [Migration("20230413205852_Delete Product Name in OrderHistory")]
+    partial class DeleteProductNameinOrderHistory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -200,6 +200,123 @@ namespace LicentaFinal.Migrations
                     b.ToTable("OrderHistory");
                 });
 
+            modelBuilder.Entity("LicentaFinal.Models.OrderInvoiceHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DateChanged")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NewAddressMail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewAdress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("NewBank")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("NewBuyerAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("NewCnpBuyer")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("NewCompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewCreator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("NewIban")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("NewNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NewObservation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewSeries")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewTradeRegistrationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldAddressMail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldAdress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("OldBank")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("OldBuyerAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("OldCnpBuyer")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("OldCompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldCreator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldCurrency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("OldIban")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("OldNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OldObservation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldSeries")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldTradeRegistrationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderInvoiceHistory");
+                });
+
             modelBuilder.Entity("LicentaFinal.Models.OrderItem", b =>
                 {
                     b.Property<int>("Id")
@@ -381,6 +498,17 @@ namespace LicentaFinal.Migrations
                         .IsRequired();
 
                     b.Navigation("OrderItem");
+                });
+
+            modelBuilder.Entity("LicentaFinal.Models.OrderInvoiceHistory", b =>
+                {
+                    b.HasOne("LicentaFinal.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("LicentaFinal.Models.OrderItem", b =>

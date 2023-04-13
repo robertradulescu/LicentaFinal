@@ -389,7 +389,49 @@ namespace LicentaFinal.Controllers
             {
                 try
                 {
+                    // Salvăm o copie a stării anterioare a modelului Order înainte de a fi actualizat
+                    var oldOrder = await _context.Order.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
+
+                    // Actualizăm modelul Order
                     _context.Update(order);
+
+                    // Creăm o nouă instanță a clasei OrderInvoiceHistory
+                    var orderInvoiceHistory = new OrderInvoiceHistory()
+                    {
+                        DateChanged = DateTime.Now,
+                        OrderId = order.Id,
+                        Order = order,
+                        OldCompanyName = oldOrder.NumeFirma,
+                        NewCompanyName = order.NumeFirma,
+                        OldSeries = oldOrder.Serie,
+                        NewSeries = order.Serie,
+                        OldNumber = oldOrder.Numar,
+                        NewNumber = order.Numar,
+                        OldCurrency = oldOrder.Moneda,
+                        NewCurrency = order.Moneda,
+                        OldAdress = oldOrder.Adresa,
+                        NewAdress = order.Adresa,
+                        OldIban = oldOrder.Iban,
+                        NewIban = order.Iban,
+                        OldBank = oldOrder.Banca,
+                        NewBank = order.Banca,
+                        OldAddressMail = oldOrder.AdresaMail,
+                        NewAddressMail = order.AdresaMail,
+                        OldObservation = oldOrder.Observatii,
+                        NewObservation = order.Observatii,
+                        OldCreator = oldOrder.Creator,
+                        NewCreator = order.Creator,
+                        OldBuyerAddress = oldOrder.AdresaCumparator,
+                        NewBuyerAddress = order.AdresaCumparator,
+                        OldCnpBuyer = oldOrder.CnpCumparator,
+                        NewCnpBuyer = order.CnpCumparator,
+                        OldTradeRegistrationNumber = oldOrder.NrInregistrareComert,
+                        NewTradeRegistrationNumber = order.NrInregistrareComert
+                    };
+
+                    // Adăugăm istoricul în baza de date
+                    _context.Add(orderInvoiceHistory);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -407,6 +449,7 @@ namespace LicentaFinal.Controllers
             }
             return View(order);
         }
+
 
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)

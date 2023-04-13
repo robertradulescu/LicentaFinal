@@ -1,0 +1,179 @@
+﻿@model LicentaFinal.Models.OrderInvoiceHistory
+
+<div>
+    <h4>OrderInvoiceHistory</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateChanged)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateChanged)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Order)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Order.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldCompanyName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldCompanyName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewCompanyName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewCompanyName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldSeries)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldSeries)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewSeries)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewSeries)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldCurrency)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldCurrency)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewCurrency)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewCurrency)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldAdress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldAdress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewAdress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewAdress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldIban)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldIban)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewIban)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewIban)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldBank)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldBank)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewBank)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewBank)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldAddressMail)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldAddressMail)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewAddressMail)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewAddressMail)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldObservation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldObservation)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewObservation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewObservation)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldCreator)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldCreator)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewCreator)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewCreator)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldBuyerAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldBuyerAddress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewBuyerAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewBuyerAddress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldCnpBuyer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldCnpBuyer)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewCnpBuyer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewCnpBuyer)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OldTradeRegistrationNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OldTradeRegistrationNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NewTradeRegistrationNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NewTradeRegistrationNumber)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-outline-dark">Back to List</a>
+</div>

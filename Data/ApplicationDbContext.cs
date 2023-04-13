@@ -26,6 +26,7 @@ namespace LicentaFinal.Data
         public DbSet<LicentaFinal.Models.Order> Order { get; set; }
         public DbSet<LicentaFinal.Models.OrderItem> OrderItem { get; set; }
         public DbSet<LicentaFinal.Models.OrderHistory>? OrderHistory { get; set; }
+        public DbSet<LicentaFinal.Models.OrderInvoiceHistory>? OrderInvoiceHistory { get; set; }
     }
 
     public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>

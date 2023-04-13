@@ -30,12 +30,33 @@ namespace LicentaFinal.Controllers
             return View(orderHistories);
         }
 
+        public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
+        {
+            return View("Index", await _context.OrderHistory
+      .Where(j => j.OrderItem.NumeProdus.Contains(SearchPhrase)
+
+      )
+      .ToListAsync());
+
+        }
 
         public async Task<IActionResult> Cleanup()
         {
             _context.OrderHistory.RemoveRange(_context.OrderHistory);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpGet]
+        public IActionResult AutocompleteNumeProdus(string term)
+        {
+            var results = _context.OrderHistory
+                            .Where(s => s.OrderItem.NumeProdus.Contains(term))
+                            .Select(s => s.OrderItem.NumeProdus)
+                            .Take(10)
+                            .ToList();
+            return Json(results);
         }
 
 

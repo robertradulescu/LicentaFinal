@@ -88,7 +88,7 @@ namespace LicentaFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NumeProdus,Cantitate,Pret")] OrderItem orderItem)
+        public async Task<IActionResult> Create([Bind("Id,NumeProdus,Cantitate,Pret,Creator")] OrderItem orderItem)
         {
             if (ModelState.IsValid)
             {

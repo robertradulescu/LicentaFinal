@@ -1,0 +1,95 @@
+﻿@model IEnumerable<LicentaFinal.Models.OrderInvoiceHistory>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ShowSearchResults">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group input-group">
+                <input name="SearchPhrase" class="form-control" id="txtNumeProdus" placeholder="Search Invoice" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary input-group-text">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<form asp-controller="OrderInvoiceHistories" asp-action="Cleanup">
+    <input type="hidden" />
+    <input type="submit" value="Sterge Istoric" class="btn btn-danger" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateChanged)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OldCompanyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NewCompanyName)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateChanged)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OldCompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NewCompanyName)
+            </td>
+
+            <td>
+
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success">Details</a>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section scripts{
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<link href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+<script>
+    $(function () {
+        $("#txtNumeProdus").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/OrderInvoiceHistories/AutocompleteNumeProdus",
+                    type: "GET",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 2
+        });
+    });
+</script>
+}
