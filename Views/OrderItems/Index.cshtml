@@ -3,9 +3,21 @@
 
 
 
-<p>
-    <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
-</p>
+<div class="row">
+    <div class="col-md-9">
+        <p>
+            <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
+        </p>
+    </div>
+    <div class="col-md-3 text-right">
+        <a href="@Url.Action("ExportToCsv", "OrderItems")">
+            <button class="btn btn-outline-success ml-2">Export to CSV</button>
+        </a>
+    </div>
+</div>
+
+
+
 
     <div style="display: flex;">
     <div style="flex: 1; padding-right: 20px; ">
@@ -26,7 +38,7 @@
 
 
 
-<div class="row">
+<div class="d-flex justify-content-between align-items-center">
     <div class="col-md-4">
         <form asp-action="ShowSearchResults">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -40,6 +52,8 @@
         </form>
     </div>
 </div>
+
+
 
 
 

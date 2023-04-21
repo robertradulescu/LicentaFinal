@@ -111,44 +111,27 @@
 
 
     </dl>
-
     <table class="table table-grey">
         <thead>
-        <tr>
-            <th>
-                NumeProdus
-            </th>
-            <th>
-                Cantitate
-            </th>
-            <th>
-                Pret
-            </th>
-        </tr>
+            <tr>
+                <th>NumeProdus</th>
+                <th>Cantitate</th>
+                <th>Pret</th>
+            </tr>
         </thead>
-
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.NumeProdus)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Cantitate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Pret)</td>
+                </tr>
+            }
+        </tbody>
     </table>
 
-
-
-
-    @foreach (var item in Model.Items)
-    {
-        <table class="table table-hover">
-            <tr>
-
-                <td>@Html.DisplayFor(modelItem => item.NumeProdus)</td>
-                <td>@Html.DisplayFor(modelItem => item.Cantitate)</td>
-                <td>@Html.DisplayFor(modelItem => item.Pret)</td>
-            </tr>
-        </table>
-    }
 </div>
-<div>
-
-
-</div>
-
 
  
 

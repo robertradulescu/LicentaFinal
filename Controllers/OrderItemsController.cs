@@ -11,6 +11,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Identity;
 using LicentaFinal.Areas.Identity.Data;
+using CsvHelper;
 
 namespace LicentaFinal.Controllers
 {
@@ -24,7 +25,33 @@ namespace LicentaFinal.Controllers
             _context = context;
             _userManager = userManager;
         }
-       
+        public async Task<IActionResult> ExportToCsv()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var orderItems = _context.OrderItem
+                .Where(o => o.Creator == currentUser.UserName)
+                .Select(o => new
+                {
+                    NumeProdus = o.NumeProdus,
+                    Cantitate = o.Cantitate,
+                    Pret = o.Pret,
+                    ValoareStoc = o.ValoareStoc
+                })
+                .ToList();
+
+            using (var stream = new MemoryStream())
+            using (var writer = new StreamWriter(stream))
+            using (var csv = new CsvWriter(writer, System.Globalization.CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(orderItems);
+                writer.Flush();
+
+                return File(stream.ToArray(), "text/csv", "OrderItems.csv");
+            }
+        }
+
+
 
         public async Task<IActionResult> ShowSearchForm()
         {

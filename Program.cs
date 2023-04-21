@@ -65,6 +65,10 @@ app.UseEndpoints(endpoints =>
         name: "order-chart",
         pattern: "Orders/chart",
         defaults: new { controller = "Order", action = "Chart" });
+
+    endpoints.MapControllerRoute(
+       name: "exporttocsv",
+       pattern: "{controller=OrderItems}/{action=ExportToCsv}");
 });
 
 
@@ -92,6 +96,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
      name: "orderhistory",
      pattern: "{controller=OrderHistory}/{action=Index}/{id?}");
+
 
 app.MapRazorPages();
 
