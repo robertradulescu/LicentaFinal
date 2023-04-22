@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<LicentaFinal.Models.OrderHistory>
 
-<h2>Order Item History</h2> <br />
+<h2>Keep track of modified stock</h2>
+<br />
 
 <div class="row">
     <div class="col-md-4">
@@ -8,7 +9,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group input-group">
-                <input name="SearchPhrase" class="form-control" id="txtNumeProdus" placeholder="Search Invoice" />
+                <input name="SearchPhrase" class="form-control" id="txtNameProduct" placeholder="Search Invoice" />
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary input-group-text">Search</button>
                 </div>
@@ -16,13 +17,13 @@
         </form>
     </div>
 </div>
-
+<br />
 <form asp-controller="OrderHistories" asp-action="Cleanup">
     <input type="hidden"  />
-    <input type="submit" value="Sterge Istoric" class="btn btn-danger" /> 
+    <input type="submit" value="Clear History" class="btn btn-danger" /> 
 </form>
 
-
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -61,10 +62,10 @@
     <link href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
     <script>
         $(function () {
-            $("#txtNumeProdus").autocomplete({
+            $("#txtNameProduct").autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: "/OrderHistories/AutocompleteNumeProdus",
+                        url: "/OrderHistories/AutocompleteProductName",
                         type: "GET",
                         data: { term: request.term },
                         success: function (data) {

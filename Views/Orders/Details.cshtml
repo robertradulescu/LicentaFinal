@@ -11,7 +11,16 @@
 </head>
 
 <div>
-    <h4>Order</h4>
+    <h3>Invoice</h3>
+    @if (User.Identity.IsAuthenticated)
+
+    {
+        <a asp-controller="Orders" asp-action="DownloadInvoice" asp-route-id="@Model?.Id" class="btn btn-outline-success">Download Invoice</a>
+
+        <a href="@Url.Action("GenerateReceipt", "Orders", new { id = Model.Id })" class="btn btn-outline-primary">Download receipt</a>
+
+    }
+
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -133,31 +142,17 @@
 
 </div>
 
- 
+
 
 
 <div>
-    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Administrator))
+    @if (User.Identity.IsAuthenticated)
 
-                {
-         <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning">Edit</a>
-                
-        <a asp-action="Index" class="btn btn-outline-dark">Back to List</a>
-        <a asp-controller="Orders" asp-action="DownloadPDF" asp-route-id="@Model?.Id" class="btn btn-outline-success">Descarcă PDF</a>
-
-        <div>
-            <a href="@Url.Action("GenerateReceipt", "Orders", new { id = Model.Id })" class="btn btn-outline-primary">Download receipt</a>
-        </div>
-
-    }
-    else
     {
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning">Edit</a>
+
         <a asp-action="Index" class="btn btn-outline-dark">Back to List</a>
-        <a asp-controller="Orders" asp-action="DownloadPDF" asp-route-id="@Model?.Id" class="btn btn-outline-success">Descarcă Factura</a>
-   
-        <div>
-            <a href="@Url.Action("GenerateReceipt", "Orders", new { id = Model.Id })" class="btn btn-outline-primary">Descarca Chitanta</a>
-        </div>
+
 
     }
 

@@ -3,7 +3,7 @@
 
 
 <p>
-    <a asp-action="Create" class="btn btn-outline-primary">Creaza o noua factura</a>
+    <a asp-action="Create" class="btn btn-outline-primary">Create a new invoice</a>
 </p>
 
 <div class="row">
@@ -12,7 +12,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group input-group">
-                <input name="SearchPhrase" class="form-control" id="txtNumeProdus" placeholder="Cauta produs" />
+                <input name="SearchPhrase" class="form-control" id="txtProductName" placeholder="Search product" />
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary input-group-text">Search</button>
                 </div>
@@ -62,7 +62,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Cumparator)
            </td>
-                @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Administrator))
+                @if (User.Identity.IsAuthenticated)
 
                 {
 
@@ -76,13 +76,7 @@
                 
                     </td>
                 }
-                else
-                {
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success">Details</a> 
-                    </td>
-                 
-                }
+
                 
         </tr>
 }
@@ -97,10 +91,10 @@
 <link href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 <script>
     $(function () {
-        $("#txtNumeProdus").autocomplete({
+            $("#txtProductName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: "/Orders/AutocompleteNumeProdus",
+                        url: "/Orders/AutocompleteProductName",
                     type: "GET",
                     data: { term: request.term },
                     success: function (data) {

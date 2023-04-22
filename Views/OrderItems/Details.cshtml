@@ -29,15 +29,11 @@
 </div>
 <div>
 
-    @if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Administrator))
+    @if (User.Identity.IsAuthenticated)
 
     {
         <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning">Edit</a>
-    }
-    else
-    {
         <a asp-action="Index" class="btn btn-outline-dark">Back to List</a>
     }
-
 </div>
 

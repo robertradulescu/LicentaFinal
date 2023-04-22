@@ -59,7 +59,7 @@ namespace LicentaFinal.Controllers
         }
 
         [HttpGet]
-        public IActionResult AutocompleteNumeProdus(string term)
+        public IActionResult AutocompleteProductName(string term)
         {
             var results = _context.OrderItem
                             .Where(s => s.NumeProdus.Contains(term))

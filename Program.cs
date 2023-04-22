@@ -72,21 +72,10 @@ app.UseEndpoints(endpoints =>
 });
 
 
-
 app.MapControllerRoute(
-    name: "DownloadPDF",
-    pattern: "Stocuris/DownloadPDF/{id}",
-    defaults: new { controller = "Stocuris", action = "DownloadPDF" });
-
-app.MapControllerRoute(
-    name: "DownloadPDF",
-    pattern: "Furnizoris/DownloadPDF/{id}",
-    defaults: new { controller = "Furnizoris", action = "DownloadPDF" });
-
-app.MapControllerRoute(
-    name: "DownloadPDF",
-    pattern: "Orders/DownloadPDF/{id}",
-    defaults: new { controller = "Orders", action = "DownloadPDF" });
+    name: "DownloadInvoice",
+    pattern: "Orders/DownloadInvoice/{id}",
+    defaults: new { controller = "Orders", action = "DownloadInvoice" });
 
 app.MapControllerRoute(
       name: "GenerateReceipt",
@@ -108,10 +97,6 @@ app.Run();
 
 void AddAuthorizationPolicies()
 {
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
-    });
 
     builder.Services.AddAuthorization(options =>
     {

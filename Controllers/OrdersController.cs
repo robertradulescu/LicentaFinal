@@ -103,7 +103,7 @@ namespace LicentaFinal.Controllers
         }
 
         [HttpGet]
-        public IActionResult AutocompleteNumeProdus(string term)
+        public IActionResult AutocompleteProductName(string term)
         {
             var results = _context.Order
                             .Where(s => s.Serie.Contains(term) || s.Cumparator.Contains(term))
@@ -226,7 +226,7 @@ namespace LicentaFinal.Controllers
             return View(order);
         }
 
-        public async Task<IActionResult> DownloadPDF(int? id)
+        public async Task<IActionResult> DownloadInvoice(int? id)
         {
 
             var ord = await _context.Order.FindAsync(id);
