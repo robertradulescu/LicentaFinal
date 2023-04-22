@@ -62,9 +62,9 @@ app.MapControllerRoute(
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-        name: "order-chart",
-        pattern: "Orders/chart",
-        defaults: new { controller = "Order", action = "Chart" });
+        name: "invoice-chart",
+        pattern: "Invoices/chart",
+        defaults: new { controller = "Invoice", action = "Chart" });
 
     endpoints.MapControllerRoute(
        name: "exporttocsv",
@@ -74,17 +74,14 @@ app.UseEndpoints(endpoints =>
 
 app.MapControllerRoute(
     name: "DownloadInvoice",
-    pattern: "Orders/DownloadInvoice/{id}",
-    defaults: new { controller = "Orders", action = "DownloadInvoice" });
+    pattern: "Invoices/DownloadInvoice/{id}",
+    defaults: new { controller = "Invoices", action = "DownloadInvoice" });
 
 app.MapControllerRoute(
       name: "GenerateReceipt",
       pattern: "OrderItems/GenerateReceipt/{id}",
       defaults: new { controller = "OrderItems", action = "GenerateReceipt" });
 
-app.MapControllerRoute(
-     name: "orderhistory",
-     pattern: "{controller=OrderHistory}/{action=Index}/{id?}");
 
 
 app.MapRazorPages();

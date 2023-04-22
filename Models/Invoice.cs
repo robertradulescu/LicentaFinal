@@ -1,6 +1,6 @@
 ﻿namespace LicentaFinal.Models
 {
-    public class Order
+    public class Invoice
     {
         public int Id { get; set; }
 
@@ -20,7 +20,7 @@
 
         public long Iban { get; set; }
 
-        public long Banca { get; set; }
+        public string Banca { get; set; }
 
         public string AdresaMail { get; set; }
 
@@ -43,7 +43,7 @@
             get => Items.Count;
         }
 
-        public Order()
+        public Invoice()
         {
             Items = new List<OrderItem>();
         }

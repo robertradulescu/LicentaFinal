@@ -97,7 +97,7 @@ namespace LicentaFinal.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("LicentaFinal.Models.Order", b =>
+            modelBuilder.Entity("LicentaFinal.Models.Invoice", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,8 +117,9 @@ namespace LicentaFinal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Banca")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Banca")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("CnpCumparator")
                         .HasColumnType("bigint");
@@ -162,10 +163,10 @@ namespace LicentaFinal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Order");
+                    b.ToTable("Invoice");
                 });
 
-            modelBuilder.Entity("LicentaFinal.Models.OrderHistory", b =>
+            modelBuilder.Entity("LicentaFinal.Models.InvoiceHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,38 +177,8 @@ namespace LicentaFinal.Migrations
                     b.Property<DateTime>("DateChanged")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("NewPrice")
-                        .HasColumnType("float");
-
-                    b.Property<int>("NewQuantity")
+                    b.Property<int>("InvoiceId")
                         .HasColumnType("int");
-
-                    b.Property<double>("OldPrice")
-                        .HasColumnType("float");
-
-                    b.Property<int>("OldQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderItemId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderItemId");
-
-                    b.ToTable("OrderHistory");
-                });
-
-            modelBuilder.Entity("LicentaFinal.Models.OrderInvoiceHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("DateChanged")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("NewAddressMail")
                         .IsRequired()
@@ -217,8 +188,9 @@ namespace LicentaFinal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("NewBank")
-                        .HasColumnType("bigint");
+                    b.Property<string>("NewBank")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NewBuyerAddress")
                         .IsRequired()
@@ -265,8 +237,9 @@ namespace LicentaFinal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("OldBank")
-                        .HasColumnType("bigint");
+                    b.Property<string>("OldBank")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OldBuyerAddress")
                         .IsRequired()
@@ -310,9 +283,42 @@ namespace LicentaFinal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("InvoiceId");
 
-                    b.ToTable("OrderInvoiceHistory");
+                    b.ToTable("InvoiceHistory");
+                });
+
+            modelBuilder.Entity("LicentaFinal.Models.OrderHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DateChanged")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("NewPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("NewQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("OldPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("OldQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderItemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderItemId");
+
+                    b.ToTable("OrderHistory");
                 });
 
             modelBuilder.Entity("LicentaFinal.Models.OrderItem", b =>
@@ -330,12 +336,12 @@ namespace LicentaFinal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("InvoiceId")
+                        .HasColumnType("int");
+
                     b.Property<string>("NumeProdus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
 
                     b.Property<double>("Pret")
                         .HasColumnType("float");
@@ -345,7 +351,7 @@ namespace LicentaFinal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("InvoiceId");
 
                     b.ToTable("OrderItem");
                 });
@@ -487,6 +493,17 @@ namespace LicentaFinal.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LicentaFinal.Models.InvoiceHistory", b =>
+                {
+                    b.HasOne("LicentaFinal.Models.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+                });
+
             modelBuilder.Entity("LicentaFinal.Models.OrderHistory", b =>
                 {
                     b.HasOne("LicentaFinal.Models.OrderItem", "OrderItem")
@@ -498,22 +515,11 @@ namespace LicentaFinal.Migrations
                     b.Navigation("OrderItem");
                 });
 
-            modelBuilder.Entity("LicentaFinal.Models.OrderInvoiceHistory", b =>
-                {
-                    b.HasOne("LicentaFinal.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("LicentaFinal.Models.OrderItem", b =>
                 {
-                    b.HasOne("LicentaFinal.Models.Order", null)
+                    b.HasOne("LicentaFinal.Models.Invoice", null)
                         .WithMany("Items")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("InvoiceId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -567,7 +573,7 @@ namespace LicentaFinal.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LicentaFinal.Models.Order", b =>
+            modelBuilder.Entity("LicentaFinal.Models.Invoice", b =>
                 {
                     b.Navigation("Items");
                 });

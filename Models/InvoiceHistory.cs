@@ -1,11 +1,11 @@
 ﻿namespace LicentaFinal.Models
 {
-    public class OrderInvoiceHistory
+    public class InvoiceHistory
     {
         public int Id { get; set; }
         public DateTime DateChanged { get; set; }
         public int OrderId { get; set; }
-        public Order Order { get; set; }
+        public Invoice Invoice { get; set; }
         public string OldCompanyName { get; set; }
         public string NewCompanyName { get; set; }
 
@@ -25,8 +25,8 @@
         public long OldIban { get; set; }
         public long NewIban { get; set; }
 
-        public long OldBank { get; set; }
-        public long NewBank { get; set; }
+        public string OldBank { get; set; }
+        public string NewBank { get; set; }
 
         public string OldAddressMail { get; set; }
         public string NewAddressMail { get; set; }

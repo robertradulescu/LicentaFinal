@@ -1,5 +1,5 @@
 ﻿@using LicentaFinal.Core;
-@model IEnumerable<LicentaFinal.Models.Order>
+@model IEnumerable<LicentaFinal.Models.Invoice>
 
 
 <p>
@@ -94,7 +94,7 @@
             $("#txtProductName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                        url: "/Orders/AutocompleteProductName",
+                        url: "/Invoices/AutocompleteProductName",
                     type: "GET",
                     data: { term: request.term },
                     success: function (data) {

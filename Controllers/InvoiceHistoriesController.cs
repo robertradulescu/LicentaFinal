@@ -10,37 +10,37 @@ using LicentaFinal.Models;
 
 namespace LicentaFinal.Controllers
 {
-    public class OrderInvoiceHistoriesController : Controller
+    public class InvoiceHistoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public OrderInvoiceHistoriesController(ApplicationDbContext context)
+        public InvoiceHistoriesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: OrderInvoiceHistories
+        // GET: InvoiceHistories
         public async Task<IActionResult> Index()
         {
             string currentUserName = User.Identity.Name;
-            var orderHistories = await _context.OrderInvoiceHistory.Include(o => o.Order)
-                                                .Where(o => o.Order.Creator == currentUserName)
+            var invoiceHistories = await _context.InvoiceHistory.Include(o => o.Invoice)
+                                                .Where(o => o.Invoice.Creator == currentUserName)
                                                 .OrderByDescending(o => o.DateChanged)
                                                 .ToListAsync();
-            return View(orderHistories);
+            return View(invoiceHistories);
         }
 
 
         public async Task<IActionResult> Cleanup()
         {
-            _context.OrderInvoiceHistory.RemoveRange(_context.OrderInvoiceHistory);
+            _context.InvoiceHistory.RemoveRange(_context.InvoiceHistory);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
         {
-            return View("Index", await _context.OrderInvoiceHistory
+            return View("Index", await _context.InvoiceHistory
       .Where(j => j.NewTradeRegistrationNumber.Contains(SearchPhrase) 
             
             || j.OldTradeRegistrationNumber.Contains(SearchPhrase)
@@ -58,7 +58,7 @@ namespace LicentaFinal.Controllers
         [HttpGet]
         public IActionResult AutocompleteProductName(string term)
         {
-            var results = _context.OrderInvoiceHistory
+            var results = _context.InvoiceHistory
                             .Where(s => s.NewCompanyName.Contains(term))
                             .Select(s => s.NewCompanyName)
                             .Take(10)
@@ -68,20 +68,20 @@ namespace LicentaFinal.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.OrderInvoiceHistory == null)
+            if (id == null || _context.InvoiceHistory == null)
             {
                 return NotFound();
             }
 
-            var orderInvoiceHistory = await _context.OrderInvoiceHistory
-                .Include(o => o.Order)
+            var invoiceHistory = await _context.InvoiceHistory
+                .Include(o => o.Invoice)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (orderInvoiceHistory == null)
+            if (invoiceHistory == null)
             {
                 return NotFound();
             }
 
-            return View(orderInvoiceHistory);
+            return View(invoiceHistory);
         }
 
     }

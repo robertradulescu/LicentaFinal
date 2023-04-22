@@ -27,7 +27,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
     <PackageReference Include="RazorComponentsPreview" Version="0.6.0" />
-   <Content Update="Views\Orders\OrderItems.cshtml">
+   <Content Update="Views\Invoices\OrderItems.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿@model LicentaFinal.Models.Order
+﻿@model LicentaFinal.Models.Invoice
 
 @{
     ViewData["Title"] = "Create";
@@ -118,7 +118,7 @@
                 async: true,
                 data: $('#form').serialize(),
                 type: "POST",
-                url: '/Orders/AddOrderItem',
+                url: '/Invoices/AddOrderItem',
                 success: function (partialView) {
                     console.log("partialView: "+partialView);
                     $('#orderItemsContainer').html(partialView);

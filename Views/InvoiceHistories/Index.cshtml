@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LicentaFinal.Models.OrderInvoiceHistory>
+﻿@model IEnumerable<LicentaFinal.Models.InvoiceHistory>
 
 <h2>Keep track of modified invoices</h2>
 <br />
@@ -18,7 +18,7 @@
     </div>
 </div>
 <br />
-<form asp-controller="OrderInvoiceHistories" asp-action="Cleanup">
+<form asp-controller="InvoiceHistories" asp-action="Cleanup">
     <input type="hidden" />
     <input type="submit" value="Clear History" class="btn btn-danger" />
 </form>
@@ -30,7 +30,7 @@
                 @Html.DisplayNameFor(model => model.DateChanged)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Order)
+                @Html.DisplayNameFor(model => model.Invoice)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.OldCompanyName)
@@ -49,7 +49,7 @@
                 @Html.DisplayFor(modelItem => item.DateChanged)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Order.Id)
+                @Html.DisplayFor(modelItem => item.Invoice.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OldCompanyName)
@@ -77,7 +77,7 @@
             $("#txtProductName").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                        url: "/OrderInvoiceHistories/AutocompleteProductName",
+                        url: "/InvoiceHistories/AutocompleteProductName",
                     type: "GET",
                     data: { term: request.term },
                     success: function (data) {

@@ -16,12 +16,12 @@ using LicentaFinal.Areas.Identity.Data;
 
 namespace LicentaFinal.Controllers
 {
-    public class OrdersController : Controller
+    public class InvoicesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrdersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public InvoicesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -30,7 +30,7 @@ namespace LicentaFinal.Controllers
         public IActionResult GenerateReceipt(int id)
         {
             // Interogare catre baza de date pentru a extrage datele corespunzatoare elementului cu id-ul dat
-            var querry = _context.Order.Find(id);
+            var querry = _context.Invoice.Find(id);
             if (querry == null)
             {
                 return NotFound();
@@ -46,16 +46,16 @@ namespace LicentaFinal.Controllers
 
             string moneda=querry.Moneda;
 
-            var order = _context.Order.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
+            var invoice = _context.Invoice.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
 
-            if (order == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
 
             double totalPrice = 0;
 
-            foreach (var item in order.Items)
+            foreach (var item in invoice.Items)
             {
                 double productTotalPrice = item.Cantitate * item.Pret;
                 totalPrice += productTotalPrice;
@@ -105,7 +105,7 @@ namespace LicentaFinal.Controllers
         [HttpGet]
         public IActionResult AutocompleteProductName(string term)
         {
-            var results = _context.Order
+            var results = _context.Invoice
                             .Where(s => s.Serie.Contains(term) || s.Cumparator.Contains(term))
                             .Select(s => s.Serie)
                             .Take(10)
@@ -117,7 +117,7 @@ namespace LicentaFinal.Controllers
 
         public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
         {
-            return View("Index", await _context.Order
+            return View("Index", await _context.Invoice
       .Where(j => j.Serie.Contains(SearchPhrase) || j.Cumparator.Contains(SearchPhrase))
       .ToListAsync());
 
@@ -148,18 +148,18 @@ namespace LicentaFinal.Controllers
         }
 
 
-        // GET: Orders
+        // GET: Invoices
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var orders = await _context.Order
+            var invoice = await _context.Invoice
                 .Where(o => o.Creator == currentUser.UserName)
                 .Include(t => t.Items)
                 .ToListAsync();
-            return View(orders);
+            return View(invoice);
         }
 
-        // GET: Orders/Details/5
+        // GET: Invoices/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -167,50 +167,50 @@ namespace LicentaFinal.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(t => t.Items)
+            var invoice = await _context.Invoice.Include(t => t.Items)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(invoice);
         }
 
-        // GET: Orders/Create
+        // GET: Invoices/Create
         public IActionResult Create()
         {
-            var model = new Order();
+            var model = new Invoice();
             model.Items.Add(new OrderItem());
             return View(model);
         }
 
-        // POST: Orders/Create
+        // POST: Invoices/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Creat,NumeFirma,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,AdresaCumparator,CnpCumparator,NrInregistrareComert,Items")] Order order)
+        public async Task<IActionResult> Create([Bind("Creat,NumeFirma,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,AdresaCumparator,CnpCumparator,NrInregistrareComert,Items")] Invoice invoice)
         {
             if (ModelState.IsValid)
             {
-                order.Creat = DateTime.UtcNow;
-                _context.Add(order);
+                invoice.Creat = DateTime.UtcNow;
+                _context.Add(invoice);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(invoice);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddOrderItem([Bind("Items")] Order order)
+        public async Task<ActionResult> AddOrderItem([Bind("Items")] Invoice invoice)
         {
-            order.Items.Add(new OrderItem());
-            return PartialView("OrderItems", order);
+            invoice.Items.Add(new OrderItem());
+            return PartialView("OrderItems", invoice);
         }
 
-        // GET: Orders/Edit/5
+        // GET: Invoices/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -218,25 +218,25 @@ namespace LicentaFinal.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.FindAsync(id);
-            if (order == null)
+            var invoice = await _context.Invoice.FindAsync(id);
+            if (invoice == null)
             {
                 return NotFound();
             }
-            return View(order);
+            return View(invoice);
         }
 
         public async Task<IActionResult> DownloadInvoice(int? id)
         {
 
-            var ord = await _context.Order.FindAsync(id);
+            var ord = await _context.Invoice.FindAsync(id);
 
             if (ord == null)
             {
                 return NotFound();
             }
 
-            var querry = _context.Order.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
+            var querry = _context.Invoice.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
 
 
             if (ord == null)
@@ -373,14 +373,14 @@ namespace LicentaFinal.Controllers
         }
 
 
-        // POST: Orders/Edit/5
+        // POST: Invoices/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Creat,NumeFirma,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,AdresaCumparator,CnpCumparator,NrInregistrareComert")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Creat,NumeFirma,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,AdresaCumparator,CnpCumparator,NrInregistrareComert")] Invoice invoice)
         {
-            if (id != order.Id)
+            if (id != invoice.Id)
             {
                 return NotFound();
             }
@@ -389,54 +389,54 @@ namespace LicentaFinal.Controllers
             {
                 try
                 {
-                    // Salvăm o copie a stării anterioare a modelului Order înainte de a fi actualizat
-                    var oldOrder = await _context.Order.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
+                    // Salvăm o copie a stării anterioare a modelului Invoice înainte de a fi actualizat
+                    var oldInvoice = await _context.Invoice.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
 
-                    // Actualizăm modelul Order
-                    _context.Update(order);
+                    // Actualizăm modelul Invoice
+                    _context.Update(invoice);
 
-                    // Creăm o nouă instanță a clasei OrderInvoiceHistory
-                    var orderInvoiceHistory = new OrderInvoiceHistory()
+                    // Creăm o nouă instanță a clasei InvoiceHistory
+                    var invoiceHistory = new InvoiceHistory()
                     {
                         DateChanged = DateTime.Now,
-                        OrderId = order.Id,
-                        Order = order,
-                        OldCompanyName = oldOrder.NumeFirma,
-                        NewCompanyName = order.NumeFirma,
-                        OldSeries = oldOrder.Serie,
-                        NewSeries = order.Serie,
-                        OldNumber = oldOrder.Numar,
-                        NewNumber = order.Numar,
-                        OldCurrency = oldOrder.Moneda,
-                        NewCurrency = order.Moneda,
-                        OldAdress = oldOrder.Adresa,
-                        NewAdress = order.Adresa,
-                        OldIban = oldOrder.Iban,
-                        NewIban = order.Iban,
-                        OldBank = oldOrder.Banca,
-                        NewBank = order.Banca,
-                        OldAddressMail = oldOrder.AdresaMail,
-                        NewAddressMail = order.AdresaMail,
-                        OldObservation = oldOrder.Observatii,
-                        NewObservation = order.Observatii,
-                        OldCreator = oldOrder.Creator,
-                        NewCreator = order.Creator,
-                        OldBuyerAddress = oldOrder.AdresaCumparator,
-                        NewBuyerAddress = order.AdresaCumparator,
-                        OldCnpBuyer = oldOrder.CnpCumparator,
-                        NewCnpBuyer = order.CnpCumparator,
-                        OldTradeRegistrationNumber = oldOrder.NrInregistrareComert,
-                        NewTradeRegistrationNumber = order.NrInregistrareComert
+                        OrderId = invoice.Id,
+                        Invoice = invoice,
+                        OldCompanyName = oldInvoice.NumeFirma,
+                        NewCompanyName = invoice.NumeFirma,
+                        OldSeries = oldInvoice.Serie,
+                        NewSeries = invoice.Serie,
+                        OldNumber = oldInvoice.Numar,
+                        NewNumber = invoice.Numar,
+                        OldCurrency = oldInvoice.Moneda,
+                        NewCurrency = invoice.Moneda,
+                        OldAdress = oldInvoice.Adresa,
+                        NewAdress = invoice.Adresa,
+                        OldIban = oldInvoice.Iban,
+                        NewIban = invoice.Iban,
+                        OldBank = oldInvoice.Banca,
+                        NewBank = invoice.Banca,
+                        OldAddressMail = oldInvoice.AdresaMail,
+                        NewAddressMail = invoice.AdresaMail,
+                        OldObservation = oldInvoice.Observatii,
+                        NewObservation = invoice.Observatii,
+                        OldCreator = oldInvoice.Creator,
+                        NewCreator = invoice.Creator,
+                        OldBuyerAddress = oldInvoice.AdresaCumparator,
+                        NewBuyerAddress = invoice.AdresaCumparator,
+                        OldCnpBuyer = oldInvoice.CnpCumparator,
+                        NewCnpBuyer = invoice.CnpCumparator,
+                        OldTradeRegistrationNumber = oldInvoice.NrInregistrareComert,
+                        NewTradeRegistrationNumber = invoice.NrInregistrareComert
                     };
 
                     // Adăugăm istoricul în baza de date
-                    _context.Add(orderInvoiceHistory);
+                    _context.Add(invoiceHistory);
 
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!OrderExists(invoice.Id))
                     {
                         return NotFound();
                     }
@@ -447,11 +447,11 @@ namespace LicentaFinal.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(invoice);
         }
 
 
-        // GET: Orders/Delete/5
+        // GET: Invoices/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -459,29 +459,29 @@ namespace LicentaFinal.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Order.Include(t => t.Items)
+            var invoice = await _context.Invoice.Include(t => t.Items)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(invoice);
         }
 
-        // POST: Orders/Delete/5
+        // POST: Invoices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await _context.Order.Include(t => t.Items).FirstOrDefaultAsync(t => t.Id == id);
-            _context.Order.Remove(order);
+            var invoice = await _context.Invoice.Include(t => t.Items).FirstOrDefaultAsync(t => t.Id == id);
+            _context.Invoice.Remove(invoice);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
         private bool OrderExists(int id)
         {
-          return _context.Order.Any(e => e.Id == id);
+          return _context.Invoice.Any(e => e.Id == id);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿@model LicentaFinal.Models.OrderInvoiceHistory
+﻿@model LicentaFinal.Models.InvoiceHistory
 
 <div>
-    <h4>OrderInvoiceHistory</h4>
+    <h4>InvoiceHistory</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -11,10 +11,10 @@
             @Html.DisplayFor(model => model.DateChanged)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Order)
+            @Html.DisplayNameFor(model => model.Invoice)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Order.Id)
+            @Html.DisplayFor(model => model.Invoice.Id)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.OldCompanyName)
