@@ -66,9 +66,6 @@ app.UseEndpoints(endpoints =>
         pattern: "Invoices/chart",
         defaults: new { controller = "Invoice", action = "Chart" });
 
-    endpoints.MapControllerRoute(
-       name: "exporttocsv",
-       pattern: "{controller=OrderItems}/{action=ExportToCsv}");
 });
 
 

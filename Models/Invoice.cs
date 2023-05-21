@@ -1,6 +1,5 @@
 ﻿namespace LicentaFinal.Models
-{
-    public class Invoice
+{   public class Invoice
     {
         public int Id { get; set; }
 
@@ -27,13 +26,12 @@
         public string Observatii { get; set; }
 
         public string Creator { get; set; }
-        
+
         public string AdresaCumparator { get; set; }
 
         public long CnpCumparator { get; set; }
 
         public string NrInregistrareComert { get; set; }
-
 
         public List<OrderItem> Items { get; set; }
 

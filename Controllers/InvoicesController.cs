@@ -122,39 +122,15 @@ namespace LicentaFinal.Controllers
       .ToListAsync());
 
         }
-        public IActionResult ChartPie()
-        {
-            var orders = _context.OrderItem
-                            .GroupBy(o => o.NumeProdus)
-                            .Select(g => new OrderItem
-                            {
-                                NumeProdus = g.Key,
-                                Cantitate = g.Sum(x => x.Cantitate)
-                            })
-                            .ToList();
-
-            return View(orders);
-        }
-
-        public IActionResult ChartColumn()
-        {
-            var orders = _context.OrderItem
-        .GroupBy(o => o.NumeProdus)
-        .Select(g => new { NumeProdus = g.Key, ValoareStoc = g.Sum(x => (decimal)(x.Cantitate * x.Pret)) })
-        .ToList();
 
 
-            return View(orders);
-        }
-
-
+        
         // GET: Invoices
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
             var invoice = await _context.Invoice
                 .Where(o => o.Creator == currentUser.UserName)
-                .Include(t => t.Items)
                 .ToListAsync();
             return View(invoice);
         }
@@ -218,11 +194,13 @@ namespace LicentaFinal.Controllers
                 return NotFound();
             }
 
-            var invoice = await _context.Invoice.FindAsync(id);
+            var invoice = await _context.Invoice.Include(t => t.Items)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (invoice == null)
             {
                 return NotFound();
             }
+
             return View(invoice);
         }
 
@@ -378,7 +356,7 @@ namespace LicentaFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Creat,NumeFirma,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,AdresaCumparator,CnpCumparator,NrInregistrareComert")] Invoice invoice)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Creat,NumeFirma,Serie,Numar,Moneda,Cumparator,Adresa,Iban,Banca,AdresaMail,Observatii,Creator,AdresaCumparator,CnpCumparator,NrInregistrareComert,Items")] Invoice invoice)
         {
             if (id != invoice.Id)
             {
@@ -389,49 +367,58 @@ namespace LicentaFinal.Controllers
             {
                 try
                 {
-                    // Salvăm o copie a stării anterioare a modelului Invoice înainte de a fi actualizat
-                    var oldInvoice = await _context.Invoice.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
-
-                    // Actualizăm modelul Invoice
-                    _context.Update(invoice);
-
-                    // Creăm o nouă instanță a clasei InvoiceHistory
-                    var invoiceHistory = new InvoiceHistory()
+                    // Obținem factura existentă din baza de date împreună cu lista de articole asociată
+                    var existingInvoice = await _context.Invoice.Include(i => i.Items).FirstOrDefaultAsync(i => i.Id == id);
+                    if (existingInvoice == null)
                     {
-                        DateChanged = DateTime.Now,
-                        OrderId = invoice.Id,
-                        Invoice = invoice,
-                        OldCompanyName = oldInvoice.NumeFirma,
-                        NewCompanyName = invoice.NumeFirma,
-                        OldSeries = oldInvoice.Serie,
-                        NewSeries = invoice.Serie,
-                        OldNumber = oldInvoice.Numar,
-                        NewNumber = invoice.Numar,
-                        OldCurrency = oldInvoice.Moneda,
-                        NewCurrency = invoice.Moneda,
-                        OldAdress = oldInvoice.Adresa,
-                        NewAdress = invoice.Adresa,
-                        OldIban = oldInvoice.Iban,
-                        NewIban = invoice.Iban,
-                        OldBank = oldInvoice.Banca,
-                        NewBank = invoice.Banca,
-                        OldAddressMail = oldInvoice.AdresaMail,
-                        NewAddressMail = invoice.AdresaMail,
-                        OldObservation = oldInvoice.Observatii,
-                        NewObservation = invoice.Observatii,
-                        OldCreator = oldInvoice.Creator,
-                        NewCreator = invoice.Creator,
-                        OldBuyerAddress = oldInvoice.AdresaCumparator,
-                        NewBuyerAddress = invoice.AdresaCumparator,
-                        OldCnpBuyer = oldInvoice.CnpCumparator,
-                        NewCnpBuyer = invoice.CnpCumparator,
-                        OldTradeRegistrationNumber = oldInvoice.NrInregistrareComert,
-                        NewTradeRegistrationNumber = invoice.NrInregistrareComert
-                    };
+                        return NotFound();
+                    }
 
-                    // Adăugăm istoricul în baza de date
-                    _context.Add(invoiceHistory);
+                    // Actualizăm proprietățile comune ale facturii
+                    existingInvoice.Creat = invoice.Creat;
+                    existingInvoice.NumeFirma = invoice.NumeFirma;
+                    existingInvoice.Serie = invoice.Serie;
+                    existingInvoice.Numar = invoice.Numar;
+                    existingInvoice.Moneda = invoice.Moneda;
+                    existingInvoice.Cumparator = invoice.Cumparator;
+                    existingInvoice.Adresa = invoice.Adresa;
+                    existingInvoice.Iban = invoice.Iban;
+                    existingInvoice.Banca = invoice.Banca;
+                    existingInvoice.AdresaMail = invoice.AdresaMail;
+                    existingInvoice.Observatii = invoice.Observatii;
+                    existingInvoice.Creator = invoice.Creator;
+                    existingInvoice.AdresaCumparator = invoice.AdresaCumparator;
+                    existingInvoice.CnpCumparator = invoice.CnpCumparator;
+                    existingInvoice.NrInregistrareComert = invoice.NrInregistrareComert;
 
+                    // Identificăm articolele existente și articolele noi
+                    var existingItems = existingInvoice.Items.ToList();
+                    var newItems = invoice.Items.ToList();
+
+                    // Actualizăm articolele existente sau le ștergem dacă nu mai există în lista de articole actualizată
+                    foreach (var existingItem in existingItems)
+                    {
+                        var newItem = newItems.FirstOrDefault(i => i.Id == existingItem.Id);
+                        if (newItem != null)
+                        {
+                            existingItem.NumeProdus = newItem.NumeProdus;
+                            existingItem.Pret = newItem.Pret;
+                            existingItem.Cantitate = newItem.Cantitate;
+                            newItems.Remove(newItem); // Eliminăm elementul actualizat din lista de articole noi
+                        }
+                        else
+                        {
+                            _context.OrderItem.Remove(existingItem); // Ștergem elementul care nu mai există în lista de articole noi
+                        }
+                    }
+
+                    // Adăugăm articolele noi în factura existentă
+                    foreach (var newItem in newItems)
+                    {
+                        existingInvoice.Items.Add(newItem);
+                    }
+
+                    // Salvăm modificările în baza de date
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -449,6 +436,9 @@ namespace LicentaFinal.Controllers
             }
             return View(invoice);
         }
+
+
+
 
 
         // GET: Invoices/Delete/5

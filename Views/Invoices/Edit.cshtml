@@ -1,7 +1,4 @@
 ﻿@model LicentaFinal.Models.Invoice
-
-
-
 <h4>Invoice</h4>
 <hr />
 <div class="row">
@@ -90,26 +87,11 @@
                 <span asp-validation-for="NrInregistrareComert" class="text-danger"></span>
             </div>
 
+            <div id="orderItemsContainer">
+                @Html.EditorFor(model => model.Items)
+            </div>
 
 
-            @foreach (var item in Model.Items)
-            {
-                <table>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(modelItem => item.NumeProdus)
-                            @Html.DisplayFor(modelItem => item.NumeProdus)
-
-                        </th>
-
-                        <th>
-                            @Html.DisplayNameFor(modelItem => item.Cantitate)
-                            @Html.DisplayFor(modelItem => item.Cantitate)
-
-                        </th>
-                    </tr>
-                </table>
-            }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-outline-success" />
             </div>

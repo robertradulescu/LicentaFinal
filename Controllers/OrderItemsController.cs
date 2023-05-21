@@ -52,7 +52,6 @@ namespace LicentaFinal.Controllers
         }
 
 
-
         public async Task<IActionResult> ShowSearchForm()
         {
             return View();
