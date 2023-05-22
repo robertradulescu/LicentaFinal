@@ -29,7 +29,6 @@ namespace LicentaFinal.Controllers
         }
         public IActionResult GenerateReceipt(int id)
         {
-            // Interogare catre baza de date pentru a extrage datele corespunzatoare elementului cu id-ul dat
             var querry = _context.Invoice.Find(id);
             if (querry == null)
             {
@@ -41,9 +40,7 @@ namespace LicentaFinal.Controllers
 
             string Cumparator=querry.Cumparator;
             string AdresaCumparator=querry.AdresaCumparator;
-
             long CnpCumparator=querry.CnpCumparator;
-
             string moneda=querry.Moneda;
 
             var invoice = _context.Invoice.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
@@ -61,9 +58,6 @@ namespace LicentaFinal.Controllers
                 totalPrice += productTotalPrice;
             }
 
-
-
-            // Creaza un nou document PDF
             Document doc = new Document();
             MemoryStream ms = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(doc, ms);
@@ -88,7 +82,7 @@ namespace LicentaFinal.Controllers
 
             PdfContentByte cb = writer.DirectContent;
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase1, 135, 750, 0);
-            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase2, 130, 651, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase2, 120, 651, 0);
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase3, 385, 650, 0);
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase4, 180, 614, 0);
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase5, 130, 588, 0);
@@ -96,7 +90,6 @@ namespace LicentaFinal.Controllers
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase7, 150, 535, 0);
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase8, 175, 535, 0);
 
-            // Inchide documentul si creeaza fisierul PDF
             doc.Close();
             byte[] bytes = ms.ToArray();
             return File(bytes, "application/pdf", "chitanta.pdf");
@@ -235,10 +228,10 @@ namespace LicentaFinal.Controllers
             logo.Alignment = Element.ALIGN_CENTER;
             document.Add(logo);
             document.Add(new Paragraph("Factura", new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD)));
-            document.Add(new Chunk("\n\n"));
+            document.Add(new Chunk("\n"));
 
             // Adăugare detalii factură
-            var facturaTable = new PdfPTable(2);
+            var facturaTable = new PdfPTable(4);
             facturaTable.WidthPercentage = 100;
             facturaTable.SpacingAfter = 20;
 
@@ -248,12 +241,19 @@ namespace LicentaFinal.Controllers
             cellStyle.Border = 0;
             cellStyle.BorderWidthBottom = 1;
 
+
+            facturaTable.AddCell(cellStyle);
+            facturaTable.AddCell(cellStyle);
+            facturaTable.AddCell(cellStyle);
+            facturaTable.AddCell(cellStyle);
+
             // Adăugare celule tabel
             facturaTable.AddCell(new PdfPCell(new Phrase("Data factura:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
             facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Creat.ToShortDateString()}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
 
-            facturaTable.AddCell(cellStyle);
-            facturaTable.AddCell(cellStyle);
+
+
+            // Informații despre factură (stânga)
 
             facturaTable.AddCell(new PdfPCell(new Phrase("Serie:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
             facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Serie}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
@@ -261,22 +261,36 @@ namespace LicentaFinal.Controllers
             facturaTable.AddCell(new PdfPCell(new Phrase("Numar:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
             facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Numar}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
 
+            facturaTable.AddCell(new PdfPCell(new Phrase("Numar Inreg Comerț:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.NrInregistrareComert}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
             facturaTable.AddCell(new PdfPCell(new Phrase("Moneda:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
             facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Moneda}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
-
-            facturaTable.AddCell(new PdfPCell(new Phrase("Cumparator:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
-            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Cumparator}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
 
             facturaTable.AddCell(new PdfPCell(new Phrase("Adresa:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
             facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Adresa}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
 
+            facturaTable.AddCell(new PdfPCell(new Phrase("Adresa e-mail:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.AdresaMail}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
             facturaTable.AddCell(new PdfPCell(new Phrase("IBAN:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
-            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Iban}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });         
-            
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Iban}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            // Banca și alte informații (dreapta)
             facturaTable.AddCell(new PdfPCell(new Phrase("Banca:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
             facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Banca}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
 
-            document.Add(facturaTable); ;
+            facturaTable.AddCell(new PdfPCell(new Phrase("Cumparator:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.Cumparator}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            facturaTable.AddCell(new PdfPCell(new Phrase("Adresa Cumparator:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.AdresaCumparator}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            facturaTable.AddCell(new PdfPCell(new Phrase("CNP Cumparator:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
+            facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.CnpCumparator}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
+
+            // Adăugați facturaTable la documentul dumneavoastră PDF
+            document.Add(facturaTable);
 
             // Adăugare tabel produse
             var productsTable = new PdfPTable(4);
@@ -341,7 +355,7 @@ namespace LicentaFinal.Controllers
 
 
             document.Add(productsTable);
-   
+
 
             document.Close();
 
@@ -374,22 +388,48 @@ namespace LicentaFinal.Controllers
                         return NotFound();
                     }
 
-                    // Actualizăm proprietățile comune ale facturii
-                    existingInvoice.Creat = invoice.Creat;
-                    existingInvoice.NumeFirma = invoice.NumeFirma;
-                    existingInvoice.Serie = invoice.Serie;
-                    existingInvoice.Numar = invoice.Numar;
-                    existingInvoice.Moneda = invoice.Moneda;
-                    existingInvoice.Cumparator = invoice.Cumparator;
-                    existingInvoice.Adresa = invoice.Adresa;
-                    existingInvoice.Iban = invoice.Iban;
-                    existingInvoice.Banca = invoice.Banca;
-                    existingInvoice.AdresaMail = invoice.AdresaMail;
-                    existingInvoice.Observatii = invoice.Observatii;
-                    existingInvoice.Creator = invoice.Creator;
-                    existingInvoice.AdresaCumparator = invoice.AdresaCumparator;
-                    existingInvoice.CnpCumparator = invoice.CnpCumparator;
-                    existingInvoice.NrInregistrareComert = invoice.NrInregistrareComert;
+                    // Salvăm valorile vechi ale facturii înainte de a actualiza câmpurile
+                    var databaseValues = _context.Entry(existingInvoice).GetDatabaseValues();
+
+                    // Actualizăm câmpurile din obiectul existingInvoice cu noile valori
+                    _context.Entry(existingInvoice).CurrentValues.SetValues(invoice);
+
+                    // Salvăm modificările în baza de date
+                    await _context.SaveChangesAsync();
+
+                    // Creăm o instanță InvoiceHistory pentru a reține modificările
+                    var invoiceHistory = new InvoiceHistory
+                    {
+                        DateChanged = DateTime.Now,
+                        OrderId = existingInvoice.Id,
+                        Invoice = existingInvoice,
+                        OldCompanyName = (string)databaseValues["NumeFirma"],
+                        NewCompanyName = invoice.NumeFirma,
+                        OldSeries = (string)databaseValues["Serie"],
+                        NewSeries = invoice.Serie,
+                        OldNumber = (int)databaseValues["Numar"],
+                        NewNumber = invoice.Numar,
+                        OldCurrency = (string)databaseValues["Moneda"],
+                        NewCurrency = invoice.Moneda,
+                        OldAdress = (string)databaseValues["Adresa"],
+                        NewAdress = invoice.Adresa,
+                        OldIban = (long)databaseValues["Iban"],
+                        NewIban = invoice.Iban,
+                        OldBank = (string)databaseValues["Banca"],
+                        NewBank = invoice.Banca,
+                        OldAddressMail = (string)databaseValues["AdresaMail"],
+                        NewAddressMail = invoice.AdresaMail,
+                        OldObservation = (string)databaseValues["Observatii"],
+                        NewObservation = invoice.Observatii,
+                        OldCreator = (string)databaseValues["Creator"],
+                        NewCreator = invoice.Creator,
+                        OldBuyerAddress = (string)databaseValues["AdresaCumparator"],
+                        NewBuyerAddress = invoice.AdresaCumparator,
+                        OldCnpBuyer = (long)databaseValues["CnpCumparator"],
+                        NewCnpBuyer = invoice.CnpCumparator,
+                        OldTradeRegistrationNumber = (string)databaseValues["NrInregistrareComert"],
+                        NewTradeRegistrationNumber = invoice.NrInregistrareComert
+                    };
 
                     // Identificăm articolele existente și articolele noi
                     var existingItems = existingInvoice.Items.ToList();
@@ -408,7 +448,7 @@ namespace LicentaFinal.Controllers
                         }
                         else
                         {
-                            _context.OrderItem.Remove(existingItem); // Ștergem elementul care nu mai există în lista de articole noi
+                            _context.Entry(existingItem).State = EntityState.Deleted; // Ștergem elementul care nu mai există în lista de articole noi
                         }
                     }
 
@@ -419,6 +459,10 @@ namespace LicentaFinal.Controllers
                     }
 
                     // Salvăm modificările în baza de date
+                    await _context.SaveChangesAsync();
+
+                    // Adăugăm InvoiceHistory în baza de date
+                    _context.InvoiceHistory.Add(invoiceHistory);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -436,6 +480,12 @@ namespace LicentaFinal.Controllers
             }
             return View(invoice);
         }
+
+
+
+
+
+
 
 
 

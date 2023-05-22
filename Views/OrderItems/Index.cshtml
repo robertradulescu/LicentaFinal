@@ -19,41 +19,38 @@
 
 
 
-    <div style="display: flex;">
-    <div style="flex: 1; padding-right: 20px; ">
-        <form asp-action="ChartPie" method="post">
-            <div style="display: flex; justify-content: center;">
+<div style="display: flex;">
+    <div style="flex: 1; padding-right: 15px; ">
+        <form asp-action="" method="post">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <h3>Grafic Pret</h3>
+                <canvas id="myChartPrice" style="max-width: 500px; max-height: 500px;"></canvas>
+            </div>
+        </form>
+    </div>
+    <div style="flex: 1; padding-right: 15px; ">
+        <form asp-action="" method="post">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <h3>Grafic Cantitate</h3>
                 <canvas id="myChart" style="max-width: 500px; max-height: 500px;"></canvas>
             </div>
         </form>
     </div>
-    <div style="flex: 1; padding-left: 20px; margin-top: 110px;">
-        <form asp-action="ChartColumn" method="post">
-            <div style="display: flex; justify-content: center;">
-                <canvas id="myChartColumn" style="max-width: 750px; max-height: 850px;"></canvas>
-            </div>
-        </form>
-    </div>
+</div>
+
+
+<div style="flex: 1; padding-left: 20px; margin-top: 45px;">
+    <form asp-action="" method="post">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <h3>Grafic Valoare Produs</h3>
+            <canvas id="myChartColumn" style="max-width: 700px; max-height: 400px;"></canvas>
+        </div>
+    </form>
 </div>
 
 
 
-<div class="d-flex justify-content-between align-items-center">
-    <div class="col-md-4">
-        <form asp-action="ShowSearchResults">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group input-group">
-                <input name="SearchPhrase" class="form-control" id="txtProductName" placeholder="Search product" />
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary input-group-text">Search</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-
+<div style="margin-top: 15px;"></div>
 
 
 <table class="table">
@@ -65,36 +62,37 @@
             <th>
                 @Html.DisplayNameFor(model => model.Cantitate)
             </th>
-             <th>
+            <th>
                 @Html.DisplayNameFor(model => model.Pret)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumeProdus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cantitate)
-            </td>
-                  <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumeProdus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantitate)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Pret)
                 </td>
 
                 @if (User.Identity.IsAuthenticated)
 
                 {
-            <td>
+                    <td>
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success">Details</a> |
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Delete</a>
-            </td>
+                    </td>
                 }
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>
 
@@ -153,6 +151,56 @@
             }
         });
     </script>
+    <script>
+        // Functie pentru generarea unei culori RGB aleatorii
+        function getRandomColor() {
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            return "rgba(" + r + "," + g + "," + b + ",0.5)";
+        }
+
+        var ctx = document.getElementById('myChartPrice').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Select(o => o.NumeProdus))),
+                datasets: [{
+                    label: 'Pret',
+                    data: @Html.Raw(Json.Serialize(Model.Select(o => o.Pret))),
+                    backgroundColor: [
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor()
+                    ],
+                    borderColor: [
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor(),
+                        getRandomColor()
+                    ],
+                    borderWidth: 1
+                }]
+
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
 
     <script>
         // Functie pentru generarea unei culori RGB aleatorii
@@ -169,7 +217,6 @@
             data: {
                 labels: @Html.Raw(Json.Serialize(Model.Select(o => o.NumeProdus))),
                 datasets: [{
-                    label: 'Valoare Stoc',
                     data: @Html.Raw(Json.Serialize(Model.Select(o => o.ValoareStoc))),
                     backgroundColor: [
                         getRandomColor(),
