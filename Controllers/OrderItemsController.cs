@@ -110,8 +110,6 @@ namespace LicentaFinal.Controllers
         }
 
         // POST: OrderItems/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,NumeProdus,Cantitate,Pret,Creator")] OrderItem orderItem)
@@ -141,9 +139,7 @@ namespace LicentaFinal.Controllers
             return View(orderItem);
         }
 
-        // POST: OrderItems/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NumeProdus,Cantitate,Pret,Creator")] OrderItem orderItem)

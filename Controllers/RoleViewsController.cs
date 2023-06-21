@@ -11,11 +11,7 @@ namespace LicentaFinal.Controllers
             return View();
         }
 
-        [Authorize(Policy = Constants.Policies.RequireManager)]
-        public IActionResult Manager()
-        {
-            return View();
-        }
+
 
         [Authorize(Policy = "RequireAdmin")]
         public IActionResult Admin()

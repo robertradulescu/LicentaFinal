@@ -42,6 +42,9 @@ namespace LicentaFinal.Controllers
             string AdresaCumparator=querry.AdresaCumparator;
             long CnpCumparator=querry.CnpCumparator;
             string moneda=querry.Moneda;
+            string inregComert = querry.NrInregistrareComert;
+            string seria = querry.Serie;
+            int nr = querry.Numar;
 
             var invoice = _context.Invoice.Include(o => o.Items).FirstOrDefault(o => o.Id == id);
 
@@ -63,11 +66,11 @@ namespace LicentaFinal.Controllers
             PdfWriter writer = PdfWriter.GetInstance(doc, ms);
             doc.Open();
 
-            // Adauga modelul de chitanta
+
             Image img = Image.GetInstance("ModelChitanta.jpg");
             doc.Add(img);
 
-            // Adauga datele pe chitanta
+
             Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
             Font font2 = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.BOLD);
             Phrase phrase1 = new Phrase($"{Unitate}", font);
@@ -78,17 +81,23 @@ namespace LicentaFinal.Controllers
             Phrase phrase6 = new Phrase($"{CnpCumparator}", font);
             Phrase phrase7 = new Phrase($"{totalPrice}", font);
             Phrase phrase8 = new Phrase($"{moneda}", font);
+            Phrase phrase9 = new Phrase($"{inregComert}", font);
+            Phrase phrase10 = new Phrase($"{seria}", font);
+            Phrase phrase11 = new Phrase($"{nr}", font);
 
 
             PdfContentByte cb = writer.DirectContent;
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase1, 135, 750, 0);
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase2, 120, 651, 0);
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase3, 385, 650, 0);
-            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase4, 180, 614, 0);
-            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase5, 130, 588, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase4, 184, 614, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase5, 133, 588, 0);
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase6, 160, 562, 0);
             ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase7, 150, 535, 0);
-            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase8, 175, 535, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase8, 185, 535, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase9, 410, 562, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase10, 370, 738, 0);
+            ColumnText.ShowTextAligned(cb, Element.ALIGN_LEFT, phrase11, 425, 738, 0);
 
             doc.Close();
             byte[] bytes = ms.ToArray();
@@ -215,14 +224,12 @@ namespace LicentaFinal.Controllers
                 return NotFound();
             }
 
-            // creaza un fisier PDF si scrie continutul in el
-            // Creare document PDF
             var document = new Document();
             var memoryStream = new MemoryStream();
             var writer = PdfWriter.GetInstance(document, memoryStream);
             document.Open();
 
-            // Adăugare logo și titlu
+
             var logo = Image.GetInstance("Logo.png");
             logo.ScalePercent(30f);
             logo.Alignment = Element.ALIGN_CENTER;
@@ -289,7 +296,6 @@ namespace LicentaFinal.Controllers
             facturaTable.AddCell(new PdfPCell(new Phrase("CNP Cumparator:", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD))) { Border = 0, Padding = 8 });
             facturaTable.AddCell(new PdfPCell(new Phrase($"{ord.CnpCumparator}", new Font(Font.FontFamily.HELVETICA, 10))) { Border = 0, Padding = 8 });
 
-            // Adăugați facturaTable la documentul dumneavoastră PDF
             document.Add(facturaTable);
 
             // Adăugare tabel produse
@@ -298,7 +304,7 @@ namespace LicentaFinal.Controllers
             productsTable.SpacingAfter = 20;
             productsTable.SetWidths(new float[] { 2f, 1f, 1f, 1f });
 
-            // Add table headers
+            // Headere
             var produsHeader = new PdfPCell(new Phrase("Produs", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
             produsHeader.HorizontalAlignment = Element.ALIGN_CENTER;
             produsHeader.PaddingBottom = 10;
@@ -323,7 +329,7 @@ namespace LicentaFinal.Controllers
             totalHeader.BackgroundColor = new BaseColor(230, 230, 230);
             productsTable.AddCell(totalHeader);
 
-            // Add table rows
+ 
             foreach (var item in querry.Items)
             {
                 var produsCell = new PdfPCell(new Phrase(item.NumeProdus, new Font(Font.FontFamily.HELVETICA, 10)));
@@ -346,7 +352,7 @@ namespace LicentaFinal.Controllers
                 productsTable.AddCell(totalCell);
 
             }
-            // Apply Bootstrap styling to table
+  
             productsTable.DefaultCell.Border = Rectangle.NO_BORDER;
             productsTable.DefaultCell.PaddingTop = 10;
             productsTable.DefaultCell.PaddingBottom = 10;
@@ -413,7 +419,7 @@ namespace LicentaFinal.Controllers
                         NewCurrency = invoice.Moneda,
                         OldAdress = (string)databaseValues["Adresa"],
                         NewAdress = invoice.Adresa,
-                        OldIban = (long)databaseValues["Iban"],
+                        OldIban = (string)databaseValues["Iban"],
                         NewIban = invoice.Iban,
                         OldBank = (string)databaseValues["Banca"],
                         NewBank = invoice.Banca,
@@ -480,15 +486,6 @@ namespace LicentaFinal.Controllers
             }
             return View(invoice);
         }
-
-
-
-
-
-
-
-
-
 
 
         // GET: Invoices/Delete/5

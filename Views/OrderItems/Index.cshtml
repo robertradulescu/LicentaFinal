@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-9">
         <p>
-            <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
+            <a asp-action="Create" class="btn btn-outline-primary">Add product</a>
         </p>
     </div>
     <div class="col-md-3 text-right">
@@ -51,6 +51,22 @@
 
 
 <div style="margin-top: 15px;"></div>
+
+
+<div class="d-flex justify-content-between align-items-center">
+    <div class="col-md-4">
+        <form asp-action="ShowSearchResults">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group input-group">
+                <input name="SearchPhrase" class="form-control" id="txtProductName" placeholder="Search product" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary input-group-text">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 
 <table class="table">

@@ -61,10 +61,10 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Admin</a>
                                 </li>
                             }
-                            else if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Manager))
+                            else if (User.Identity.IsAuthenticated && User.IsInRole(Constants.Roles.Administrator))
                             {
                                  <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Manager</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Administrator</a>
                                 </li>
 
                             }

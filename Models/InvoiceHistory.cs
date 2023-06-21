@@ -22,8 +22,8 @@
         public string OldAdress { get; set; }
         public string NewAdress { get; set; }
 
-        public long OldIban { get; set; }
-        public long NewIban { get; set; }
+        public string OldIban { get; set; }
+        public string NewIban { get; set; }
 
         public string OldBank { get; set; }
         public string NewBank { get; set; }
